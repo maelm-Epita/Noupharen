@@ -2,7 +2,6 @@
 #include <letter.hpp>
 
 // A word is a collection of letter(s)
-class Word{
-public:
+struct Word{
   std::vector<Letter*> letters;
 };

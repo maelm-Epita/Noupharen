@@ -2,10 +2,11 @@
 
 #include <string>
 
-class Noun;
+struct Noun;
 
 // A gender is a collection of rules to be applied to nouns
-struct Gender{
+class Gender{
+public:
   std::string name;
   Noun ApplyGender(Noun *noun);
 };
