@@ -6,11 +6,25 @@
       "-Iinclude/",
       "-g",
       "-o",
+      "build/letter.o",
+      "src/letter.cpp"
+    ],
+    "directory": "/home/mael/Code/DictionnaryGENERATOR/dictio",
+    "file": "/home/mael/Code/DictionnaryGENERATOR/dictio/src/letter.cpp",
+    "output": "/home/mael/Code/DictionnaryGENERATOR/dictio/build/letter.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-Iinclude/",
+      "-g",
+      "-o",
       "build/main.o",
       "src/main.cpp"
     ],
-    "directory": "/home/mael/Code/DictionnaryGENERATOR",
-    "file": "/home/mael/Code/DictionnaryGENERATOR/src/main.cpp",
-    "output": "/home/mael/Code/DictionnaryGENERATOR/build/main.o"
+    "directory": "/home/mael/Code/DictionnaryGENERATOR/dictio",
+    "file": "/home/mael/Code/DictionnaryGENERATOR/dictio/src/main.cpp",
+    "output": "/home/mael/Code/DictionnaryGENERATOR/dictio/build/main.o"
   }
 ]

@@ -5,5 +5,5 @@
 
 // A noun is a word which has a gender which can apply rules onto it
 class Noun : Word{
-  struct Gender gender;
+  struct Gender *gender;
 };

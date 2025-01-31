@@ -4,5 +4,5 @@
 // A word is a collection of letter(s)
 class Word{
 public:
-  std::vector<Letter> letters;
+  std::vector<Letter*> letters;
 };
