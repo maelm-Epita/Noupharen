@@ -1,22 +1,16 @@
 #pragma once
 
 #include "syllable.hpp"
-#include "wordattribute.hpp"
+#include "wordgroup.hpp"
 #include <vector>
 
-// A word is a collection of letter(s)
+// A word is a collection of letter(s), it belongs to a "type" (such as noun, verb...) it can have attributes (like a gender, verb group, etc)
 struct Word{
   std::vector<Syllable> syllables;
+  std::vector<WordAttribute*> attributes;
+  WordGroup *group;
   // Gets the string representation of the word
   std::string GetString();
+  std::string GetDebugString();
 };
 
-// A noun is a word which has a gender which can apply rules onto it
-struct Noun : Word{
-  WordAttribute *gender;
-};
-
-// A verb is a word which belongs to a verb group
-struct Verb : Word{
-  WordAttribute *verb_group;
-};

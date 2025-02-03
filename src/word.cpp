@@ -9,3 +9,19 @@ std::string Word::GetString(){
   }
   return word;
 }
+
+std::string Word::GetDebugString(){
+  std::string wstr = GetString();
+  std::string result = wstr + " | " + group->group_identifier + " (";
+  for (WordAttribute *attr : attributes){
+    result += attr->attribute_identifier;
+  }
+  result += ")\nSyllable patterns : ";
+  for (Syllable syl : syllables){
+    for (unsigned int i=0; i<syl.letters.size(); i++){
+      result += syl.letters[i]->character + "[" + syl.pattern[i]->group_identifier + "]";
+    }
+    result += " ";
+  }
+  return result;
+}
