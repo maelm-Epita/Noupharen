@@ -1,6 +1,6 @@
 #pragma once
 
-#include <noun.hpp>
+#include "word.hpp"
 
 // A dictionnary is a collection of words, which can be saved to and loaded from a file
 class Dictionnary{
