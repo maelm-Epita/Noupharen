@@ -5,5 +5,5 @@
 
 struct WordGroup{
   std::string group_identifier;
-  std::vector<WordAttribute*> possible_attributes;
+  std::vector<WordAttribute> possible_attributes;
 };

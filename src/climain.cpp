@@ -53,10 +53,10 @@ int climain(){
   WordGroup wgroup1, wgroup2;
   wgroup1.group_identifier = "Noun";
   wgroup2.group_identifier = "Verb";
-  wgroup1.possible_attributes.push_back(&wattr1);
-  wgroup1.possible_attributes.push_back(&wattr2);
-  wgroup2.possible_attributes.push_back(&wattr3);
-  wgroup2.possible_attributes.push_back(&wattr4);
+  wgroup1.possible_attributes.push_back(wattr1);
+  wgroup1.possible_attributes.push_back(wattr2);
+  wgroup2.possible_attributes.push_back(wattr3);
+  wgroup2.possible_attributes.push_back(wattr4);
   Generator generator;
   generator.min_syllable_count = 2;
   generator.max_syllable_count = 6;
