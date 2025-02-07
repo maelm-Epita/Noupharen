@@ -17,6 +17,12 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_pushButton_2_clicked();
+
+    void on_generateBtn_clicked();
+
+    void on_clearOutBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     QStandardItemModel *model;

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>810</width>
+    <width>828</width>
     <height>600</height>
    </rect>
   </property>
@@ -63,7 +63,7 @@
       <property name="tabBarAutoHide">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="tab1_2">
+      <widget class="QWidget" name="generationTab">
        <attribute name="title">
         <string>Generation</string>
        </attribute>
@@ -75,7 +75,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="5" column="0">
-            <widget class="QPushButton" name="pushButton_5">
+            <widget class="QPushButton" name="loadSetngsBtn">
              <property name="text">
               <string>Load settings</string>
              </property>
@@ -90,83 +90,69 @@
               <enum>QFrame::Shadow::Raised</enum>
              </property>
              <layout class="QGridLayout" name="gridLayout_5">
-              <item row="4" column="0">
-               <widget class="QPushButton" name="pushButton_6">
-                <property name="text">
-                 <string>Letters and syllable patterns...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>Minimum number of syllables</string>
-                </property>
-               </widget>
+              <item row="1" column="1">
+               <widget class="QSpinBox" name="minNbSSpin"/>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="label_3">
+               <widget class="QLabel" name="maxNbSLabel">
                 <property name="text">
                  <string>Maximum number of syllables</string>
                 </property>
                </widget>
               </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="minNbSLabel">
+                <property name="text">
+                 <string>Minimum number of syllables</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="nbWSpin"/>
+              </item>
+              <item row="2" column="1">
+               <widget class="QSpinBox" name="maxNbSSpin"/>
+              </item>
               <item row="0" column="0">
-               <widget class="QLabel" name="label">
+               <widget class="QLabel" name="nbWLabel">
                 <property name="text">
                  <string>Number of words to generate</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="2">
-               <widget class="QPushButton" name="pushButton_7">
+              <item row="3" column="0">
+               <widget class="QPushButton" name="langSetngsBtn">
                 <property name="text">
-                 <string>Probabilities...</string>
+                 <string>Language settings...</string>
                 </property>
                </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QPushButton" name="pushButton_8">
-                <property name="text">
-                 <string>Word groups...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QSpinBox" name="spinBox_3"/>
-              </item>
-              <item row="1" column="1">
-               <widget class="QSpinBox" name="spinBox_2"/>
-              </item>
-              <item row="0" column="1">
-               <widget class="QSpinBox" name="spinBox"/>
               </item>
              </layout>
             </widget>
            </item>
            <item row="6" column="0">
-            <widget class="QPushButton" name="pushButton_3">
+            <widget class="QPushButton" name="clearSetngsBtn">
              <property name="text">
               <string>Clear settings</string>
              </property>
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QPushButton" name="pushButton_2">
+            <widget class="QPushButton" name="clearOutBtn">
              <property name="text">
               <string>Clear Output</string>
              </property>
             </widget>
            </item>
            <item row="2" column="0">
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="generateBtn">
              <property name="text">
               <string>Generate</string>
              </property>
             </widget>
            </item>
            <item row="4" column="0">
-            <widget class="QPushButton" name="pushButton_4">
+            <widget class="QPushButton" name="saveSetngsBtn">
              <property name="text">
               <string>Save settings</string>
              </property>
@@ -182,14 +168,14 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="1" column="0">
-            <widget class="QPushButton" name="pushButton_10">
+            <widget class="QPushButton" name="saveDictNewBtn">
              <property name="text">
               <string>Save to new dictionary</string>
              </property>
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QPushButton" name="pushButton_9">
+            <widget class="QPushButton" name="saveDictBtn">
              <property name="text">
               <string>Save to current dictionary</string>
              </property>
@@ -234,7 +220,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_3">
+      <widget class="QWidget" name="dictionaryTab">
        <attribute name="title">
         <string>Dictionary</string>
        </attribute>

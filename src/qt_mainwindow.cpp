@@ -93,18 +93,9 @@ MainWindow::~MainWindow(){
 }
 
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_generateBtn_clicked()
 {
     std::vector<Word> generated_words = context.generator.GenerateWords();
-    /*
-    unsigned int format_minsize = 35;
-    for (Word word : generated_words){
-        std::string word_string = word.GetString() + " ";
-        while (word_string.length() < format_minsize){
-            word_string += " ";
-        }
-        word_string += "| " + word.group->group_identifier + " (";
-*/
     for (Word word : generated_words){
         std::string group_string = word.group->group_identifier + " (";
         for (unsigned int i=0; i<word.attributes.size(); i++){
@@ -119,5 +110,11 @@ void MainWindow::on_pushButton_clicked()
         row << new QStandardItem(QString::fromStdString(group_string));
         model->appendRow(row);
     }
+}
+
+
+void MainWindow::on_clearOutBtn_clicked()
+{
+    model->clear();
 }
 
