@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <ctime>
-#include <generator.hpp>
+#include "include/generator.hpp"
 
 Generator::Generator(){
   nb_words = 0;
@@ -17,7 +17,7 @@ Syllable Generator::GenerateSyllable(){
   new_syllable.pattern = syllable_patterns[syllable_pattern_index];
   for (LetterGroup *group : new_syllable.pattern){
     unsigned int letter_index = rand() % group->letters.size(); // random letter from current group
-    new_syllable.letters.push_back(group->letters[letter_index]);
+    new_syllable.letters.push_back(&group->letters[letter_index]);
   }
   return new_syllable;
 }
@@ -25,7 +25,7 @@ Syllable Generator::GenerateSyllable(){
 Word Generator::GenerateWord(){
   Word new_word;
   unsigned int wgroup_index = rand() % (word_groups.size()); // random word group
-  new_word.group = word_groups[wgroup_index];
+  new_word.group = &word_groups[wgroup_index];
   unsigned int wattr_index = rand() % (new_word.group->possible_attributes.size()); // random attr from group
   new_word.attributes.push_back(new_word.group->possible_attributes[wattr_index]);
   unsigned int syllable_count = rand() % (max_syllable_count-min_syllable_count+1) + min_syllable_count; // random word size
@@ -34,7 +34,7 @@ Word Generator::GenerateWord(){
     new_word.syllables.push_back(GenerateSyllable());
   }
   for (WordAttribute *attr : new_word.attributes){
-    attr->attribute_function(&new_word); // apply attr
+    //attr->attribute_function(&new_word); // apply attr
   }
   return new_word;
 }

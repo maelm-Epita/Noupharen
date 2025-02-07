@@ -14,8 +14,8 @@ public:
   unsigned int nb_words;
   unsigned int min_syllable_count;
   unsigned int max_syllable_count;
-  std::vector<LetterGroup*> letter_groups;
-  std::vector<WordGroup*> word_groups;
+  std::vector<LetterGroup> letter_groups;
+  std::vector<WordGroup> word_groups;
   std::vector<SyllablePattern> syllable_patterns;
 
   // Generate words based on settings

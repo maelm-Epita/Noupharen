@@ -1,4 +1,4 @@
-#include <word.hpp>
+#include "include/word.hpp"
 
 std::string Word::GetString(){
   std::string word = "";

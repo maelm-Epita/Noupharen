@@ -1,5 +1,5 @@
-#include <dictionnary.hpp>
+#include "include/dictionary.hpp"
 
-Dictionnary::Dictionnary(){
+Dictionary::Dictionary(){
   words = {};
 }

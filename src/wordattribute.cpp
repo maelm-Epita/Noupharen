@@ -1,5 +1,5 @@
-#include "word.hpp"
-#include "wordattribute.hpp"
+#include "include/word.hpp"
+#include "include/wordattribute.hpp"
 
 void WordAttribute::WATTR_PRESET_DONOTHING(Word *word){
   return;
