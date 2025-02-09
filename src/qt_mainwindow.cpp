@@ -1,15 +1,9 @@
 #include "include/qt_mainwindow.h"
+#include "include/qt_langsettingswindow.h"
 #include "ui_mainwindow.h"
-#include "include/generator.hpp"
-#include "include/dictionary.hpp"
 
-struct Context{
-    Generator generator;
-    Dictionary dictionary;
-};
-Context context;
 
-void SetupContext(){
+void MainWindow::SetupContext(){
   Letter letter1, letter2, letter3, letter4, letter5, letter6;
   letter1.character = "g";
   letter2.character = "a";
@@ -76,10 +70,24 @@ void SetupContext(){
   context.generator.nb_words = 10;
 }
 
+SETTINGS_ERROR MainWindow::ApplySettings(){
+    unsigned int minNbSyl = ui->minNbSSpin->value();
+    unsigned int maxNbSyl = ui->maxNbSSpin->value();
+    unsigned int nbWords = ui->nbWSpin->value();
+    if (minNbSyl > maxNbSyl){
+        return SETTINGS_ERROR_SYLLABLECOUNT_MAX_MIN;
+    }
+    context.generator.min_syllable_count = minNbSyl;
+    context.generator.max_syllable_count = maxNbSyl;
+    context.generator.nb_words = nbWords;
+    return SETTINGS_ERROR_NOERR;
+}
+
 void MainWindow::SetupCustomUi(){
     model = new QStandardItemModel(0, 2, 0);
     model->setHorizontalHeaderLabels({"Word", "Group(s)"});
-    ui->tableView->setModel(model);
+    ui->outpuTblView->setModel(model);
+    ui->errLabel->setVisible(false);
 }
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -95,6 +103,13 @@ MainWindow::~MainWindow(){
 
 void MainWindow::on_generateBtn_clicked()
 {
+    ui->errLabel->setVisible(false);
+    SETTINGS_ERROR err = ApplySettings();
+    if (err != SETTINGS_ERROR_NOERR){
+        ui->errLabel->setVisible(true);
+        ui->errLabel->setText(QString::fromStdString("Invalid settings : " + GetSettingsErrorMessage(err)));
+        return;
+    }
     std::vector<Word> generated_words = context.generator.GenerateWords();
     for (Word word : generated_words){
         std::string group_string = word.group->group_identifier + " (";
@@ -116,5 +131,13 @@ void MainWindow::on_generateBtn_clicked()
 void MainWindow::on_clearOutBtn_clicked()
 {
     model->clear();
+    model->setHorizontalHeaderLabels({"Word", "Group(s)"});
+}
+
+
+void MainWindow::on_langSetngsBtn_clicked()
+{
+    LangSettingsWindow *win = new LangSettingsWindow(this);
+    win->show();
 }
 

@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QStandardItemModel>
+#include "settingserror.hpp"
+#include "include/generator.hpp"
+#include "include/dictionary.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,20 +17,25 @@ class MainWindow : public QMainWindow{
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    struct Context{
+        Generator generator;
+        Dictionary dictionary;
+    };
+    Context context;
 private slots:
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
-
     void on_generateBtn_clicked();
 
     void on_clearOutBtn_clicked();
+
+    void on_langSetngsBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
     QStandardItemModel *model;
 
+    void SetupContext();
     void SetupCustomUi();
+    SETTINGS_ERROR ApplySettings();
 };
 
 #endif // QT_MAINWINDOW_H

@@ -1,0 +1,12 @@
+#ifndef SETTINGSERROR_H
+#define SETTINGSERROR_H
+
+#include <string>
+
+enum SETTINGS_ERROR{
+    SETTINGS_ERROR_NOERR,
+    SETTINGS_ERROR_SYLLABLECOUNT_MAX_MIN,
+};
+
+std::string GetSettingsErrorMessage(SETTINGS_ERROR);
+#endif // SETTINGSERROR_H
