@@ -5,6 +5,8 @@ QT = core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+
+
 SOURCES += \
     main.cpp \
     src/climain.cpp \
@@ -15,9 +17,10 @@ SOURCES += \
     src/qt_mainwindow.cpp \
     src/qt_tbvbuttondelegate.cpp \
     src/qt_tbvcomboboxdelegate.cpp \
+    src/qt_wattrsettingswindow.cpp \
     src/settingserror.cpp \
     src/word.cpp \
-    src/wordattribute.cpp
+    src/wordattributefunctionpreset.cpp
 
 HEADERS += \
     forms/langsettingswindow.h \
@@ -30,17 +33,20 @@ HEADERS += \
     include/qt_mainwindow.h \
     include/qt_tbvbuttondelegate.h \
     include/qt_tbvcomboboxdelegate.h \
+    include/qt_wattrsettingswindow.h \
     include/settingserror.hpp \
     include/syllable.hpp \
     include/syllablepattern.hpp \
     include/word.hpp \
     include/wordattribute.hpp \
+    include/wordattributefunctionpreset.hpp \
     include/wordgroup.hpp \
     qt_tbvcomboboxdelegate.h
 
 FORMS += \
   forms/langsettingswindow.ui \
-  forms/mainwindow.ui
+  forms/mainwindow.ui \
+  forms/wattrsettingswindow.ui
 
 RESOURCES += \
   resources/images.qrc

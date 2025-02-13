@@ -1,11 +1,14 @@
 
 #include "include/qt_attributetableview.h"
+#include "include/qt_wattrsettingswindow.h"
 
 #include <QPushButton>
 
 AttributeTableView::AttributeTableView(QWidget *parent) : QTableView(parent){};
 
 void AttributeTableView::handleButtonClick(int row){
+    WattrSettingsWindow *win = new WattrSettingsWindow(langwin, row, langwin);
+    win->exec();
 }
 
 void AttributeTableView::showButtonInCell(int row) {

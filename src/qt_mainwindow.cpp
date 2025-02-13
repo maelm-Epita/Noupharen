@@ -52,16 +52,16 @@ void MainWindow::SetupContext(){
   wattr2.attribute_identifier = "feminine";
   wattr3.attribute_identifier = "godan";
   wattr4.attribute_identifier = "ichidan";
-  wattr1.attribute_function = WordAttribute::WATTR_PRESET_DONOTHING;
-  wattr1.attribute_func_preset = ENUM_WATTR_PRESET_DONOTHING;
-  wattr2.attribute_function = WordAttribute::WATTR_PRESET_DONOTHING;
-  wattr2.attribute_func_preset = ENUM_WATTR_PRESET_DONOTHING;
-  wattr3.attribute_function = [wattr3suf](Word *word) {WordAttribute::WATTR_PRESET_ADD_SUFFIX(wattr3suf, word);};
-  wattr3.attribute_func_preset = ENUM_WATTR_PRESET_ADD_SUFFIX;
+  wattr1.attribute_function = WordAttributeFunctionPreset::WATTR_PRESET_DONOTHING;
+  wattr1.attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[ENUM_WATTR_PRESET_DONOTHING];
+  wattr2.attribute_function = WordAttributeFunctionPreset::WATTR_PRESET_DONOTHING;
+  wattr2.attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[ENUM_WATTR_PRESET_DONOTHING];
+  wattr3.attribute_function = [wattr3suf](Word *word) {WordAttributeFunctionPreset::WATTR_PRESET_ADD_SUFFIX(wattr3suf, word);};
   wattr3.attribute_func_arguments.push_back(wattr3suf);
-  wattr4.attribute_function = [wattr4pref](Word *word) {WordAttribute::WATTR_PRESET_ADD_PREFIX(wattr4pref, word);};
-  wattr4.attribute_func_preset = ENUM_WATTR_PRESET_ADD_PREFIX;
+  wattr3.attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[ENUM_WATTR_PRESET_ADD_SUFFIX];
+  wattr4.attribute_function = [wattr4pref](Word *word) {WordAttributeFunctionPreset::WATTR_PRESET_ADD_PREFIX(wattr4pref, word);};
   wattr4.attribute_func_arguments.push_back(wattr4pref);
+  wattr4.attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[ENUM_WATTR_PRESET_ADD_PREFIX];
   WordGroup wgroup1, wgroup2;
   wgroup1.group_identifier = "Noun";
   wgroup2.group_identifier = "Verb";
@@ -143,7 +143,7 @@ void MainWindow::on_clearOutBtn_clicked()
 
 void MainWindow::on_langSetngsBtn_clicked()
 {
-    LangSettingsWindow *win = new LangSettingsWindow(this);
-    win->show();
+    LangSettingsWindow *win = new LangSettingsWindow(this, this);
+    win->exec();
 }
 

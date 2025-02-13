@@ -7,7 +7,7 @@ QWidget *TBVComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionVi
 {
     QComboBox *comboBox = new QComboBox(parent);
     for (unsigned int i=0; i<ENUM_WATTR_PRESET_LAST; i++){
-        comboBox->addItem(QString::fromStdString(WordAttribute::GetWattrPresetName((ENUM_WATTR_PRESET)i)));
+        comboBox->addItem(QString::fromStdString(WordAttributeFunctionPreset::GetWattrPresetName((WATTR_PRESET_FUNCTION)i)));
     }
     return comboBox;
 }

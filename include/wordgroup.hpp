@@ -1,6 +1,7 @@
 #pragma once
 
-#include "wordattribute.hpp"
+#include "include/wordattribute.hpp"
+#include <string>
 #include <vector>
 
 struct WordGroup{

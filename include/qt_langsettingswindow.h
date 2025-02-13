@@ -2,13 +2,16 @@
 #define LANGSETTINGSWINDOW_H
 
 #include "qt_attributetableview.h"
+#include "include/wordattribute.hpp"
 
 #include <QDialog>
 #include <include/qt_mainwindow.h>
 
+QT_BEGIN_NAMESPACE
 namespace Ui {
 class LangSettingsWindow;
 }
+QT_END_NAMESPACE
 
 class LangSettingsWindow : public QDialog
 {
@@ -17,12 +20,13 @@ class LangSettingsWindow : public QDialog
 public:
     explicit LangSettingsWindow(MainWindow *mainwin, QWidget *parent = nullptr);
     ~LangSettingsWindow();
+    std::vector<WordAttribute> pending_wordattributes;
 
 private slots:
 
     void on_applyBtn_clicked();
 
-    void on_quitBtn_clicked();
+    void on_cancelBtn_clicked();
 
     void on_addwgrpBtn_clicked();
 
@@ -31,6 +35,8 @@ private slots:
     void on_addwattrBtn_clicked();
 
     void on_delwattrBtn_clicked();
+
+    void OnWattrmodelDatachanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QList <int> &roles);
 
 private:
     MainWindow *mainwin;

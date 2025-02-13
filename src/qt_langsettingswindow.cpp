@@ -1,14 +1,14 @@
 #include "include/qt_langsettingswindow.h"
 #include "include/qt_tbvcomboboxdelegate.h"
-#include "include/qt_tbvbuttondelegate.h"
 #include "ui_langsettingswindow.h"
 
 
-
 void LangSettingsWindow::SetupCustomUi(){
-    wattr_tbv = new AttributeTableView();
+    wattr_tbv = new AttributeTableView(ui->window);
+    wattr_tbv->langwin = this;
     ui->gridLayout_4->replaceWidget(ui->wattrTblView, wattr_tbv);
-    delete ui->wattrTblView;
+    ui->wattrTblView->hide();
+    ui->wattrTblView->deleteLater();
     ui->wattrTblView = wattr_tbv;
     ui->wattrTblView->horizontalHeader()->setStretchLastSection(true);
     wgrp_model = new QStandardItemModel(0, 2, 0);
@@ -18,6 +18,7 @@ void LangSettingsWindow::SetupCustomUi(){
     wattr_model->setHorizontalHeaderLabels({"Name", "Function", "Edit Function Parameter(s)"});
     ui->wattrTblView->setModel(wattr_model);
     ui->wattrTblView->setItemDelegateForColumn(1, new TBVComboBoxDelegate(wattr_tbv));
+    connect(wattr_model, &QStandardItemModel::dataChanged, this, &LangSettingsWindow::OnWattrmodelDatachanged);
 }
 
 void LangSettingsWindow::LoadContextSettings(){
@@ -39,8 +40,9 @@ void LangSettingsWindow::LoadContextSettings(){
             if (!alreadyAdded){
                 QList<QStandardItem*> row;
                 row << new QStandardItem(QString::fromStdString(wattr.attribute_identifier));
-                row << new QStandardItem(QString::fromStdString(WordAttribute::GetWattrPresetName(wattr.attribute_func_preset)));
+                row << new QStandardItem(QString::fromStdString(WordAttributeFunctionPreset::GetWattrPresetName(wattr.attribute_func_preset.func_preset)));
                 wattr_model->appendRow(row);
+                pending_wordattributes.push_back(wattr);
             }
         }
         QList<QStandardItem*> row;
@@ -71,7 +73,7 @@ void LangSettingsWindow::on_applyBtn_clicked()
 
 }
 
-void LangSettingsWindow::on_quitBtn_clicked()
+void LangSettingsWindow::on_cancelBtn_clicked()
 {
     close();
 }
@@ -103,15 +105,28 @@ void LangSettingsWindow::on_addwattrBtn_clicked()
     int row_index = wattr_model->rowCount();
     wattr_model->appendRow(row);
     wattr_tbv->showButtonInCell(row_index);
+    WordAttribute new_attr;
+    new_attr.attribute_identifier = "AttributeName";
+    new_attr.attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[ENUM_WATTR_PRESET_DONOTHING];
+    pending_wordattributes.push_back(new_attr);
 }
 
 
 void LangSettingsWindow::on_delwattrBtn_clicked()
 {
-    //QModelIndexList selection = ui->wattrTblView->selectionModel()->selectedIndexes();
     QModelIndexList selection = wattr_tbv->selectionModel()->selectedIndexes();
     for (QModelIndex item : selection){
         wattr_model->removeRow(item.row());
+        if (item.row() < pending_wordattributes.size()){
+            pending_wordattributes.erase(pending_wordattributes.begin() + item.row());
+        }
     }
 }
 
+void LangSettingsWindow::OnWattrmodelDatachanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QList<int> &roles){
+    for (unsigned int i=topLeft.row(); i<=bottomRight.row(); i++){
+        pending_wordattributes[i].attribute_identifier = wattr_model->index(i, 0).data().toString().toStdString();
+        WATTR_PRESET_FUNCTION func_preset = WordAttributeFunctionPreset::GetWattrPresetEnum(wattr_model->index(i, 1).data().toString().toStdString());
+        pending_wordattributes[i].attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[func_preset];
+    }
+}
