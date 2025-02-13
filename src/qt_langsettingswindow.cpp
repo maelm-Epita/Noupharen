@@ -1,13 +1,23 @@
 #include "include/qt_langsettingswindow.h"
+#include "include/qt_tbvcomboboxdelegate.h"
+#include "include/qt_tbvbuttondelegate.h"
 #include "ui_langsettingswindow.h"
 
+
+
 void LangSettingsWindow::SetupCustomUi(){
+    wattr_tbv = new AttributeTableView();
+    ui->gridLayout_4->replaceWidget(ui->wattrTblView, wattr_tbv);
+    delete ui->wattrTblView;
+    ui->wattrTblView = wattr_tbv;
+    ui->wattrTblView->horizontalHeader()->setStretchLastSection(true);
     wgrp_model = new QStandardItemModel(0, 2, 0);
-    wattr_model = new QStandardItemModel(0, 2, 0);
+    wattr_model = new QStandardItemModel(0, 3, 0);
     wgrp_model->setHorizontalHeaderLabels({"Name", "Attribute(s)"});
     ui->wgrpTblView->setModel(wgrp_model);
-    wattr_model->setHorizontalHeaderLabels({"Name", "Function"});
+    wattr_model->setHorizontalHeaderLabels({"Name", "Function", "Edit Function Parameter(s)"});
     ui->wattrTblView->setModel(wattr_model);
+    ui->wattrTblView->setItemDelegateForColumn(1, new TBVComboBoxDelegate(wattr_tbv));
 }
 
 void LangSettingsWindow::LoadContextSettings(){
@@ -29,7 +39,7 @@ void LangSettingsWindow::LoadContextSettings(){
             if (!alreadyAdded){
                 QList<QStandardItem*> row;
                 row << new QStandardItem(QString::fromStdString(wattr.attribute_identifier));
-                row << new QStandardItem(QString::fromStdString("ff"));
+                row << new QStandardItem(QString::fromStdString(WordAttribute::GetWattrPresetName(wattr.attribute_func_preset)));
                 wattr_model->appendRow(row);
             }
         }
@@ -89,14 +99,17 @@ void LangSettingsWindow::on_addwattrBtn_clicked()
 {
     QList<QStandardItem*> row;
     row << new QStandardItem(QString::fromStdString("AttributeName"));
-    row << new QStandardItem(QString::fromStdString("AttributeFunction"));
+    row << new QStandardItem(QString::fromStdString("Do nothing"));
+    int row_index = wattr_model->rowCount();
     wattr_model->appendRow(row);
+    wattr_tbv->showButtonInCell(row_index);
 }
 
 
 void LangSettingsWindow::on_delwattrBtn_clicked()
 {
-    QModelIndexList selection = ui->wattrTblView->selectionModel()->selectedIndexes();
+    //QModelIndexList selection = ui->wattrTblView->selectionModel()->selectedIndexes();
+    QModelIndexList selection = wattr_tbv->selectionModel()->selectedIndexes();
     for (QModelIndex item : selection){
         wattr_model->removeRow(item.row());
     }

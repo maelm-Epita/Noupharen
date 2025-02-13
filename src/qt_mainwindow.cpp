@@ -53,9 +53,15 @@ void MainWindow::SetupContext(){
   wattr3.attribute_identifier = "godan";
   wattr4.attribute_identifier = "ichidan";
   wattr1.attribute_function = WordAttribute::WATTR_PRESET_DONOTHING;
+  wattr1.attribute_func_preset = ENUM_WATTR_PRESET_DONOTHING;
   wattr2.attribute_function = WordAttribute::WATTR_PRESET_DONOTHING;
+  wattr2.attribute_func_preset = ENUM_WATTR_PRESET_DONOTHING;
   wattr3.attribute_function = [wattr3suf](Word *word) {WordAttribute::WATTR_PRESET_ADD_SUFFIX(wattr3suf, word);};
+  wattr3.attribute_func_preset = ENUM_WATTR_PRESET_ADD_SUFFIX;
+  wattr3.attribute_func_arguments.push_back(wattr3suf);
   wattr4.attribute_function = [wattr4pref](Word *word) {WordAttribute::WATTR_PRESET_ADD_PREFIX(wattr4pref, word);};
+  wattr4.attribute_func_preset = ENUM_WATTR_PRESET_ADD_PREFIX;
+  wattr4.attribute_func_arguments.push_back(wattr4pref);
   WordGroup wgroup1, wgroup2;
   wgroup1.group_identifier = "Noun";
   wgroup2.group_identifier = "Verb";

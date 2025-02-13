@@ -1,6 +1,19 @@
 #include "include/word.hpp"
 #include "include/wordattribute.hpp"
 
+std::string WordAttribute::GetWattrPresetName(ENUM_WATTR_PRESET preset){
+    switch (preset){
+    case ENUM_WATTR_PRESET_DONOTHING:
+        return "Do nothing";
+    case ENUM_WATTR_PRESET_ADD_PREFIX:
+        return "Add prefix syllable(s)";
+    case ENUM_WATTR_PRESET_ADD_SUFFIX:
+        return "Add suffix syllable(s)";
+    default:
+        return "invalid attribute function";
+    }
+}
+
 void WordAttribute::WATTR_PRESET_DONOTHING(Word *word){
   return;
 }

@@ -1,6 +1,8 @@
 #ifndef LANGSETTINGSWINDOW_H
 #define LANGSETTINGSWINDOW_H
 
+#include "qt_attributetableview.h"
+
 #include <QDialog>
 #include <include/qt_mainwindow.h>
 
@@ -35,6 +37,7 @@ private:
     Ui::LangSettingsWindow *ui;
     QStandardItemModel *wgrp_model;
     QStandardItemModel *wattr_model;
+    AttributeTableView *wattr_tbv;
 
     void SetupCustomUi();
     void ApplySettings();

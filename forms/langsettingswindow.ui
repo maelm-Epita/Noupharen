@@ -115,20 +115,6 @@
           <string>Word Groups</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="3" column="0">
-           <widget class="QLabel" name="wgrpLbl">
-            <property name="text">
-             <string>Word Groups</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="0">
-           <widget class="QPushButton" name="addwattrBtn">
-            <property name="text">
-             <string>Add attribute</string>
-            </property>
-           </widget>
-          </item>
           <item row="11" column="1">
            <widget class="QPushButton" name="delwattrBtn">
             <property name="text">
@@ -136,11 +122,14 @@
             </property>
            </widget>
           </item>
-          <item row="6" column="0">
-           <widget class="QPushButton" name="addwgrpBtn">
-            <property name="text">
-             <string>Add Group</string>
+          <item row="5" column="0" colspan="2">
+           <widget class="QTableView" name="wgrpTblView">
+            <property name="sortingEnabled">
+             <bool>true</bool>
             </property>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
            </widget>
           </item>
           <item row="6" column="1">
@@ -157,18 +146,29 @@
             </property>
            </widget>
           </item>
-          <item row="10" column="0" colspan="2">
-           <widget class="QTableView" name="wattrTblView">
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>true</bool>
-            </attribute>
+          <item row="3" column="0">
+           <widget class="QLabel" name="wgrpLbl">
+            <property name="text">
+             <string>Word Groups</string>
+            </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="2">
-           <widget class="QTableView" name="wgrpTblView">
-            <property name="sortingEnabled">
-             <bool>true</bool>
+          <item row="6" column="0">
+           <widget class="QPushButton" name="addwgrpBtn">
+            <property name="text">
+             <string>Add Group</string>
             </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QPushButton" name="addwattrBtn">
+            <property name="text">
+             <string>Add attribute</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0" colspan="2">
+           <widget class="QTableView" name="wattrTblView">
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
