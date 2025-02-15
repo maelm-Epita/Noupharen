@@ -21,19 +21,22 @@ public:
 
 private slots:
 
-    void on_cancelBtn_clicked();
+    void on_quitBtn_clicked();
 
     void on_applyBtn_clicked();
+
+    void on_presetCbBox_currentIndexChanged(int index);
 
 private:
     Ui::WattrSettingsWindow *ui;
     LangSettingsWindow *langwin;
     QList<QWidget*> arg_widgets;
-    QComboBox *presetcbBox;
+    WordAttributeFunctionPreset pending_preset;
     unsigned int row;
     void ApplySettings();
     void SetupCustomUi();
     void LoadArgSettings();
+    void LoadArgFields(WordAttributeFunctionPreset);
 };
 
 #endif // WATTRSETTINGSWINDOW_H

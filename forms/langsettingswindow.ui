@@ -31,9 +31,9 @@
     <widget class="QWidget" name="window" native="true">
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="2" column="1">
-       <widget class="QPushButton" name="cancelBtn">
+       <widget class="QPushButton" name="quitBtn">
         <property name="text">
-         <string>Cancel</string>
+         <string>Quit</string>
         </property>
        </widget>
       </item>
@@ -47,7 +47,7 @@
       <item row="0" column="0" colspan="2">
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="ltrTab">
          <attribute name="title">
@@ -62,7 +62,7 @@
              </font>
             </property>
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Format : &amp;lt;GROUP&amp;gt; : &amp;lt;LETTERS&amp;gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Group can be any string &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Letters can be any string separated by a space &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Each line is one group&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Format : &amp;lt;GROUP&amp;gt;:&amp;lt;LETTERS&amp;gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Group can be any string &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Letters can be any string separated by a space &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Each line is one group&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Letters and Letter groups</string>
@@ -85,7 +85,13 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QPlainTextEdit" name="sylptnTxtEdit"/>
+           <widget class="QPlainTextEdit" name="sylptnTxtEdit">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+           </widget>
           </item>
           <item row="2" column="1">
            <widget class="QLabel" name="isylptnexLbl">
@@ -103,10 +109,22 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QPlainTextEdit" name="isylptnexTxtEdit"/>
+           <widget class="QPlainTextEdit" name="isylptnexTxtEdit">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0" rowspan="3">
-           <widget class="QPlainTextEdit" name="ltrgrpTxtEdit"/>
+           <widget class="QPlainTextEdit" name="ltrgrpTxtEdit">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

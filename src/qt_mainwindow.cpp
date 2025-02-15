@@ -42,10 +42,10 @@ void MainWindow::SetupContext(){
   wattr3syl.pattern.push_back(&context.generator.letter_groups[0]);
   wattr3syl.pattern.push_back(&context.generator.letter_groups[1]);
   wattr3suf = {wattr3syl};
-  wattr3syl.letters.push_back(&context.generator.letter_groups[0].letters[0]);
-  wattr3syl.letters.push_back(&context.generator.letter_groups[1].letters[0]);
-  wattr3syl.pattern.push_back(&context.generator.letter_groups[0]);
-  wattr3syl.pattern.push_back(&context.generator.letter_groups[1]);
+  wattr4syl.letters.push_back(&context.generator.letter_groups[0].letters[0]);
+  wattr4syl.letters.push_back(&context.generator.letter_groups[1].letters[0]);
+  wattr4syl.pattern.push_back(&context.generator.letter_groups[0]);
+  wattr4syl.pattern.push_back(&context.generator.letter_groups[1]);
   wattr4pref = {wattr4syl, wattr4syl};
   WordAttribute wattr1, wattr2, wattr3, wattr4;
   wattr1.attribute_identifier = "masculine";

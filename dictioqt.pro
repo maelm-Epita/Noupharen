@@ -12,6 +12,7 @@ SOURCES += \
     src/climain.cpp \
     src/dictionnary.cpp \
     src/generator.cpp \
+    src/lettergroup.cpp \
     src/qt_attributetableview.cpp \
     src/qt_langsettingswindow.cpp \
     src/qt_mainwindow.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
     src/qt_tbvcomboboxdelegate.cpp \
     src/qt_wattrsettingswindow.cpp \
     src/settingserror.cpp \
+    src/syllable.cpp \
     src/word.cpp \
     src/wordattributefunctionpreset.cpp
 

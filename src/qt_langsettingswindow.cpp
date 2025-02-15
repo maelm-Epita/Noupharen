@@ -22,6 +22,12 @@ void LangSettingsWindow::SetupCustomUi(){
 }
 
 void LangSettingsWindow::LoadContextSettings(){
+    // first tab
+    std::string lgrpstr = LetterGroup::LGStringFromLetterGroups(mainwin->context.generator.letter_groups);
+    ui->ltrgrpTxtEdit->setPlainText(QString::fromStdString(lgrpstr));
+    std::string spstr = LetterGroup::SPStringFromSyllablePatterns(mainwin->context.generator.syllable_patterns);
+    ui->sylptnTxtEdit->setPlainText(QString::fromStdString(spstr));
+    // second tab
     std::vector<WordGroup> wgroups = mainwin->context.generator.word_groups;
     for (WordGroup grp : wgroups){
         std::string wgrp_id = grp.group_identifier;
@@ -73,7 +79,7 @@ void LangSettingsWindow::on_applyBtn_clicked()
 
 }
 
-void LangSettingsWindow::on_cancelBtn_clicked()
+void LangSettingsWindow::on_quitBtn_clicked()
 {
     close();
 }

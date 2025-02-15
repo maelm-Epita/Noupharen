@@ -18,9 +18,7 @@ std::string Word::GetDebugString(){
   }
   result += ")\nSyllable patterns : ";
   for (Syllable syl : syllables){
-    for (unsigned int i=0; i<syl.letters.size(); i++){
-      result += syl.letters[i]->character + "[" + syl.pattern[i]->group_identifier + "]";
-    }
+    result += syl.GetDebugString();
     result += " ";
   }
   return result;

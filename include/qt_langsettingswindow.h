@@ -20,13 +20,15 @@ class LangSettingsWindow : public QDialog
 public:
     explicit LangSettingsWindow(MainWindow *mainwin, QWidget *parent = nullptr);
     ~LangSettingsWindow();
+    MainWindow *mainwin;
     std::vector<WordAttribute> pending_wordattributes;
+    QStandardItemModel *wattr_model;
 
 private slots:
 
     void on_applyBtn_clicked();
 
-    void on_cancelBtn_clicked();
+    void on_quitBtn_clicked();
 
     void on_addwgrpBtn_clicked();
 
@@ -39,10 +41,8 @@ private slots:
     void OnWattrmodelDatachanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QList <int> &roles);
 
 private:
-    MainWindow *mainwin;
     Ui::LangSettingsWindow *ui;
     QStandardItemModel *wgrp_model;
-    QStandardItemModel *wattr_model;
     AttributeTableView *wattr_tbv;
 
     void SetupCustomUi();

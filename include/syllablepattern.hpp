@@ -1,8 +1,8 @@
 #pragma once
 
-#include "lettergroup.hpp"
 #include <vector>
 
+class LetterGroup;
 typedef std::vector<LetterGroup*> SyllablePattern;
 /*
 struct SyllablePattern{
