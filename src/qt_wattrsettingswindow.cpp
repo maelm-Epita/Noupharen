@@ -66,8 +66,9 @@ void WattrSettingsWindow::on_quitBtn_clicked()
 
 void WattrSettingsWindow::on_applyBtn_clicked()
 {
-    langwin->pending_wordattributes[row].attribute_func_arguments.clear();
-    langwin->pending_wordattributes[row].attribute_func_preset = pending_preset;
+    //langwin->pending_wordattributes[row].attribute_func_arguments.clear();
+    //langwin->pending_wordattributes[row].attribute_func_preset = pending_preset;
+    langwin->pending_attribargs[row].clear();
     QModelIndex index = langwin->wattr_model->index(row, 1);
     langwin->wattr_model->setData(index, QString::fromStdString(WordAttributeFunctionPreset::GetWattrPresetName(pending_preset.func_preset)));
     switch (pending_preset.func_preset){
@@ -76,23 +77,21 @@ void WattrSettingsWindow::on_applyBtn_clicked()
     {
         std::string sylblsstr = qobject_cast<QLineEdit*>(arg_widgets[0])->text().toStdString();
         std::vector<Syllable> sylbls = Syllable::SyllablesFromArgString(sylblsstr, &langwin->mainwin->context.generator.letter_groups);
-        langwin->pending_wordattributes[row].attribute_func_arguments.push_back(sylbls);
-        if (pending_preset.func_preset == ENUM_WATTR_PRESET_ADD_PREFIX){
+        langwin->pending_attribargs[row].push_back(sylbls);
+        //langwin->pending_wordattributes[row].attribute_func_arguments.push_back(sylbls);
+        /*if (pending_preset.func_preset == ENUM_WATTR_PRESET_ADD_PREFIX){
             langwin->pending_wordattributes[row].attribute_function = [sylbls](Word *word) {WordAttributeFunctionPreset::WATTR_PRESET_ADD_PREFIX(sylbls, word);};
         }
         else{
             langwin->pending_wordattributes[row].attribute_function = [sylbls](Word *word) {WordAttributeFunctionPreset::WATTR_PRESET_ADD_SUFFIX(sylbls, word);};
         }
-        return;
+        return;*/
     }
     case ENUM_WATTR_PRESET_DONOTHING:
-    {
-        langwin->pending_wordattributes[row].attribute_function = WordAttributeFunctionPreset::WATTR_PRESET_DONOTHING;
-    }
+        //langwin->pending_wordattributes[row].attribute_function = WordAttributeFunctionPreset::WATTR_PRESET_DONOTHING;
     default:
         break;
     }
-
 }
 
 

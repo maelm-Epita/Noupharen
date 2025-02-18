@@ -22,6 +22,7 @@ public:
     ~LangSettingsWindow();
     MainWindow *mainwin;
     std::vector<WordAttribute> pending_wordattributes;
+    std::vector<std::vector<AttributeFuncArgument>> pending_attribargs;
     QStandardItemModel *wattr_model;
 
 private slots:

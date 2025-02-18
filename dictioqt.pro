@@ -23,6 +23,7 @@ SOURCES += \
     src/settingserror.cpp \
     src/syllable.cpp \
     src/word.cpp \
+    src/wordattribute.cpp \
     src/wordattributefunctionpreset.cpp
 
 HEADERS += \

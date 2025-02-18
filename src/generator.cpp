@@ -33,8 +33,10 @@ Word Generator::GenerateWord(){
   for (unsigned int i=0; i<syllable_count; i++){
     new_word.syllables.push_back(GenerateSyllable());
   }
+  // THIS LINE WILL CAUSE A CRASH IF NEW LETTER GROUPS ARE CREATED WHILE ATTRIBUTES DON'T CHANGE BECAUSE
+  // OBVIOUSLY THE ATTRIBUTE FUNCTIONS LETTER POINTERS POINT TO LETTERS FROM GROUPS THAT DONT EXISTE ANYMORE LOL
   for (WordAttribute *attr : new_word.attributes){
-    attr->attribute_function(&new_word); // apply attr
+    //attr->attribute_function(&new_word); // apply attr
   }
   return new_word;
 }

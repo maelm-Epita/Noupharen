@@ -36,7 +36,7 @@ void LangSettingsWindow::LoadContextSettings(){
             WordAttribute wattr = grp.possible_attributes[i];
             wgrp_attr += wattr.attribute_identifier;
             if (i<grp.possible_attributes.size()-1){
-                wgrp_attr += ", ";
+                wgrp_attr += ",";
             }
             bool alreadyAdded=0;
             for (unsigned int j=0; j<wattr_model->rowCount(); j++){
@@ -48,7 +48,8 @@ void LangSettingsWindow::LoadContextSettings(){
                 row << new QStandardItem(QString::fromStdString(wattr.attribute_identifier));
                 row << new QStandardItem(QString::fromStdString(WordAttributeFunctionPreset::GetWattrPresetName(wattr.attribute_func_preset.func_preset)));
                 wattr_model->appendRow(row);
-                pending_wordattributes.push_back(wattr);
+                //pending_wordattributes.push_back(wattr);
+                pending_attribargs.push_back(wattr.attribute_func_arguments);
             }
         }
         QList<QStandardItem*> row;
@@ -80,8 +81,37 @@ void LangSettingsWindow::on_applyBtn_clicked()
     mainwin->context.generator.letter_groups = LetterGroup::LetterGroupsFromLGString(LGString);
     std::vector<LetterGroup> *grps = &mainwin->context.generator.letter_groups;
     mainwin->context.generator.syllable_patterns = LetterGroup::SyllablePatternsFromSPString(SPString, grps);
-    //mainwin->context.generator.word_groups = pend
-    //mainwin->context;
+    std::vector<WordAttribute> pending_wattr;
+    for (unsigned int i=0; i<pending_attribargs.size(); i++){
+        WordAttribute attr;
+        attr.attribute_func_arguments = pending_attribargs[i];
+        attr.attribute_identifier = wattr_model->index(i, 0).data().toString().toStdString();
+        WATTR_PRESET_FUNCTION func_preset = WordAttributeFunctionPreset::GetWattrPresetEnum(wattr_model->index(i, 1).data().toString().toStdString());
+        attr.attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[func_preset];
+        if (attr.attribute_func_preset.func_preset == ENUM_WATTR_PRESET_ADD_PREFIX){
+            std::vector<Syllable> arg1 = std::get<std::vector<Syllable>>(attr.attribute_func_arguments[0]);
+            attr.attribute_function = [arg1](Word *word) {WordAttributeFunctionPreset::WATTR_PRESET_ADD_PREFIX(arg1, word);};
+        }
+        else if (attr.attribute_func_preset.func_preset == ENUM_WATTR_PRESET_ADD_SUFFIX){
+            std::vector<Syllable> arg1 = std::get<std::vector<Syllable>>(attr.attribute_func_arguments[0]);
+            attr.attribute_function = [arg1](Word *word) {WordAttributeFunctionPreset::WATTR_PRESET_ADD_SUFFIX(arg1, word);};
+        }
+        else if (attr.attribute_func_preset.func_preset == ENUM_WATTR_PRESET_DONOTHING){
+            attr.attribute_function = WordAttributeFunctionPreset::WATTR_PRESET_DONOTHING;
+        }
+        else {
+            break;
+        }
+        pending_wattr.push_back(attr);
+    }
+    QStandardItemModel *mod = qobject_cast<QStandardItemModel*>(ui->wgrpTblView->model());
+    for (unsigned int i=0; i<mod->rowCount(); i++){
+        WordGroup grp;
+        grp.group_identifier = mod->data(mod->index(i, 0)).toString().toStdString();
+        grp.possible_attributes = WordAttribute::GetWordAttributesFromStr(mod->data(mod->index(i, 1)).toString().toStdString(), pending_wattr);
+        mainwin->context.generator.word_groups.push_back(grp);
+    }
+    mainwin->context.generator.word_groups;
 }
 
 void LangSettingsWindow::on_quitBtn_clicked()
@@ -116,10 +146,12 @@ void LangSettingsWindow::on_addwattrBtn_clicked()
     int row_index = wattr_model->rowCount();
     wattr_model->appendRow(row);
     wattr_tbv->showButtonInCell(row_index);
-    WordAttribute new_attr;
-    new_attr.attribute_identifier = "AttributeName";
-    new_attr.attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[ENUM_WATTR_PRESET_DONOTHING];
-    pending_wordattributes.push_back(new_attr);
+    //WordAttribute new_attr;
+    //new_attr.attribute_identifier = "AttributeName";
+    //new_attr.attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[ENUM_WATTR_PRESET_DONOTHING];
+    //pending_wordattributes.push_back(new_attr);
+    std::vector<AttributeFuncArgument> v;
+    pending_attribargs.push_back(v);
 }
 
 
@@ -129,15 +161,16 @@ void LangSettingsWindow::on_delwattrBtn_clicked()
     for (QModelIndex item : selection){
         wattr_model->removeRow(item.row());
         if (item.row() < pending_wordattributes.size()){
-            pending_wordattributes.erase(pending_wordattributes.begin() + item.row());
+            //pending_wordattributes.erase(pending_wordattributes.begin() + item.row());
+            pending_attribargs.erase(pending_attribargs.begin() + item.row());
         }
     }
 }
 
 void LangSettingsWindow::OnWattrmodelDatachanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QList<int> &roles){
     for (unsigned int i=topLeft.row(); i<=bottomRight.row(); i++){
-        pending_wordattributes[i].attribute_identifier = wattr_model->index(i, 0).data().toString().toStdString();
-        WATTR_PRESET_FUNCTION func_preset = WordAttributeFunctionPreset::GetWattrPresetEnum(wattr_model->index(i, 1).data().toString().toStdString());
-        pending_wordattributes[i].attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[func_preset];
+        //pending_wordattributes[i].attribute_identifier = wattr_model->index(i, 0).data().toString().toStdString();
+        //WATTR_PRESET_FUNCTION func_preset = WordAttributeFunctionPreset::GetWattrPresetEnum(wattr_model->index(i, 1).data().toString().toStdString());
+        //pending_wordattributes[i].attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[func_preset];
     }
 }
