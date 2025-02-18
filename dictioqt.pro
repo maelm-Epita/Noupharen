@@ -12,6 +12,7 @@ SOURCES += \
     src/climain.cpp \
     src/dictionnary.cpp \
     src/generator.cpp \
+    src/helpers.cpp \
     src/lettergroup.cpp \
     src/qt_attributetableview.cpp \
     src/qt_langsettingswindow.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     forms/langsettingswindow.h \
     include/dictionary.hpp \
     include/generator.hpp \
+    include/helpers.h \
     include/letter.hpp \
     include/lettergroup.hpp \
     include/qt_attributetableview.h \

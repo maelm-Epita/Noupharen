@@ -75,8 +75,13 @@ LangSettingsWindow::~LangSettingsWindow()
 
 void LangSettingsWindow::on_applyBtn_clicked()
 {
+    std::string LGString = ui->ltrgrpTxtEdit->toPlainText().toStdString();
+    std::string SPString = ui->sylptnTxtEdit->toPlainText().toStdString();
+    mainwin->context.generator.letter_groups = LetterGroup::LetterGroupsFromLGString(LGString);
+    std::vector<LetterGroup> *grps = &mainwin->context.generator.letter_groups;
+    mainwin->context.generator.syllable_patterns = LetterGroup::SyllablePatternsFromSPString(SPString, grps);
+    //mainwin->context.generator.word_groups = pend
     //mainwin->context;
-
 }
 
 void LangSettingsWindow::on_quitBtn_clicked()
