@@ -83,6 +83,15 @@ SETTINGS_ERROR MainWindow::ApplySettings(){
     if (minNbSyl > maxNbSyl){
         return SETTINGS_ERROR_SYLLABLECOUNT_MAX_MIN;
     }
+    if (context.generator.letter_groups.size() == 0){
+        return SETTINGS_ERROR_NO_LETTERGROUP;
+    }
+    if (context.generator.syllable_patterns.size() == 0){
+        return SETTINGS_ERROR_NO_SYLLABLEPATTERN;
+    }
+    if (context.generator.word_groups.size() == 0){
+        return SETTINGS_ERROR_NO_WORDGROUP;
+    }
     context.generator.min_syllable_count = minNbSyl;
     context.generator.max_syllable_count = maxNbSyl;
     context.generator.nb_words = nbWords;
@@ -99,7 +108,7 @@ void MainWindow::SetupCustomUi(){
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
     SetupCustomUi();
-    SetupContext();
+    //SetupContext();
 }
 
 MainWindow::~MainWindow(){

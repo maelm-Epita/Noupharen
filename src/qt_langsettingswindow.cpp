@@ -129,7 +129,10 @@ SETTINGS_ERROR LangSettingsWindow::ApplySettings(){
         WordGroup grp;
         grp.group_identifier = mod->data(mod->index(i, 0)).toString().toStdString();
         if (WordAttribute::GetWordAttributesFromStr(mod->data(mod->index(i, 1)).toString().toStdString(), pending_wattrs, &grp.possible_attributes)){
-            err = SETTINGS_ERROR_WORDGROUP_ATTRIBUTE;
+            err = SETTINGS_ERROR_WORDGROUP_ATTRIBUTE_UNKNOWN;
+        }
+        if (grp.possible_attributes.size() == 0){
+            err = SETTINGS_ERROR_NO_WORDGROUP_ATTRIBUTE;
         }
         pending_wordgroups.push_back(grp);
     }
