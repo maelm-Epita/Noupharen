@@ -19,5 +19,5 @@ public:
   std::vector<AttributeFuncArgument> attribute_func_arguments;
   WordAttributeFunctionPreset attribute_func_preset;
 
-  static std::vector<WordAttribute> GetWordAttributesFromStr(std::string, std::vector<WordAttribute>);
+  static bool GetWordAttributesFromStr(std::string, std::vector<WordAttribute>, std::vector<WordAttribute>*);
 };

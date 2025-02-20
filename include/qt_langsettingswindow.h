@@ -2,7 +2,7 @@
 #define LANGSETTINGSWINDOW_H
 
 #include "qt_attributetableview.h"
-#include "include/wordattribute.hpp"
+#include "include/syllable.hpp"
 
 #include <QDialog>
 #include <include/qt_mainwindow.h>
@@ -21,8 +21,7 @@ public:
     explicit LangSettingsWindow(MainWindow *mainwin, QWidget *parent = nullptr);
     ~LangSettingsWindow();
     MainWindow *mainwin;
-    std::vector<WordAttribute> pending_wordattributes;
-    std::vector<std::vector<AttributeFuncArgument>> pending_attribargs;
+    std::vector<std::vector<std::string>> pending_attribarg_fields;
     QStandardItemModel *wattr_model;
 
 private slots:
@@ -47,7 +46,7 @@ private:
     AttributeTableView *wattr_tbv;
 
     void SetupCustomUi();
-    void ApplySettings();
+    SETTINGS_ERROR ApplySettings();
     void LoadContextSettings();
 };
 

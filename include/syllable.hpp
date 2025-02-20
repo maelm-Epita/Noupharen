@@ -11,6 +11,6 @@ public:
 
   std::string GetDebugString();
 
-  static std::vector<Syllable> SyllablesFromArgString(std::string, std::vector<LetterGroup>*);
+  static bool SyllablesFromArgString(std::string, std::vector<LetterGroup>*, std::vector<Syllable>* res);
   static std::string ArgStringFromSyllables(std::vector<Syllable>);
 };

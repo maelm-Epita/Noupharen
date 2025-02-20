@@ -3,7 +3,7 @@
 #include <QPushButton>
 #include "src/qt_mainwindow.cpp"
 
-void debugSyl(){
+/*void debugSyl(){
     Letter letter1, letter2, letter3, letter4, letter5, letter6;
     letter1.character = "g";
     letter2.character = "a";
@@ -27,6 +27,7 @@ void debugSyl(){
         qInfo() << syl.GetDebugString();
     }
 }
+*/
 
 int main(int argc, char **argv){
     QApplication app (argc, argv);

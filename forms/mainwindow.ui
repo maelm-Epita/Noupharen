@@ -230,7 +230,7 @@
                  </sizepolicy>
                 </property>
                 <property name="text">
-                 <string>TextLabel</string>
+                 <string>Err Label</string>
                 </property>
                </widget>
               </item>

@@ -13,5 +13,5 @@ public:
   static std::string LGStringFromLetterGroups(std::vector<LetterGroup>);
   static std::string SPStringFromSyllablePatterns(std::vector<SyllablePattern>);
   static std::vector<LetterGroup> LetterGroupsFromLGString(std::string);
-  static std::vector<SyllablePattern> SyllablePatternsFromSPString(std::string, std::vector<LetterGroup>*);
+  static bool SyllablePatternsFromSPString(std::string, std::vector<LetterGroup>*, std::vector<SyllablePattern>*);
 };

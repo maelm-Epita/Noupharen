@@ -16,7 +16,9 @@ class WattrSettingsWindow: public QDialog
     Q_OBJECT
 
 public:
-    explicit WattrSettingsWindow(LangSettingsWindow *langwin, unsigned int row_nb, QWidget *parent = nullptr);
+    explicit WattrSettingsWindow(LangSettingsWindow *langwin,
+                                 unsigned int row_nb, std::string atrname, WordAttributeFunctionPreset pendingpreset,
+                                 QWidget *parent = nullptr);
     ~WattrSettingsWindow();
 
 private slots:
@@ -32,6 +34,7 @@ private:
     LangSettingsWindow *langwin;
     QList<QWidget*> arg_widgets;
     WordAttributeFunctionPreset pending_preset;
+    std::string atr_name;
     unsigned int row;
     void ApplySettings();
     void SetupCustomUi();

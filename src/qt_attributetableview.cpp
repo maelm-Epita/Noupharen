@@ -7,7 +7,10 @@
 AttributeTableView::AttributeTableView(QWidget *parent) : QTableView(parent){};
 
 void AttributeTableView::handleButtonClick(int row){
-    WattrSettingsWindow *win = new WattrSettingsWindow(langwin, row, langwin);
+    std::string n = model()->data(model()->index(row, 0)).toString().toStdString();
+    std::string pstr = model()->data(model()->index(row, 1)).toString().toStdString();
+    WordAttributeFunctionPreset p = WordAttributeFunctionPreset::WordAttributeFunctionPresets[WordAttributeFunctionPreset::GetWattrPresetEnum(pstr)];
+    WattrSettingsWindow *win = new WattrSettingsWindow(langwin, row, n, p, langwin);
     win->exec();
 }
 

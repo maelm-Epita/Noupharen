@@ -8,6 +8,7 @@ LetterGroup* FindGroupWithIdentifier(std::string id, std::vector<LetterGroup> *g
             return grp;
         }
     }
+    return nullptr;
 }
 
 std::string LetterGroup::LGStringFromLetterGroups(std::vector<LetterGroup> groups){
@@ -68,16 +69,19 @@ std::vector<LetterGroup> LetterGroup::LetterGroupsFromLGString(std::string strin
     return res;
 }
 
-std::vector<SyllablePattern> LetterGroup::SyllablePatternsFromSPString(std::string string, std::vector<LetterGroup> *grps){
-    std::vector<SyllablePattern> res;
+bool LetterGroup::SyllablePatternsFromSPString(std::string string, std::vector<LetterGroup> *grps, std::vector<SyllablePattern>* res){
     std::vector<std::string> ptrns = split(string, '\n');
     for (std::string ptrn : ptrns){
         SyllablePattern pattern;
         std::vector<std::string> grpids = split(ptrn, ' ');
         for (std::string grpid : grpids ){
+            LetterGroup* grp = FindGroupWithIdentifier(grpid, grps);
+            if (grp == nullptr){
+                return 1;
+            }
             pattern.push_back(FindGroupWithIdentifier(grpid, grps));
         }
-        res.push_back(pattern);
+        res->push_back(pattern);
     }
-    return res;
+    return 0;
 }

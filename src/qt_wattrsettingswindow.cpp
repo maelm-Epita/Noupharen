@@ -18,8 +18,8 @@ void WattrSettingsWindow::LoadArgFields(WordAttributeFunctionPreset preset){
                                                        "by a space (' ').\n"
                                                        "Exemple :<letter>_<letter> <letter>_<letter>"));
             w_input = new QLineEdit(ui->argsFrame);
-            if (langwin->pending_wordattributes[row].attribute_func_arguments.size() == 1){
-                std::string arg_str = Syllable::ArgStringFromSyllables(std::get<std::vector<Syllable>>(langwin->pending_wordattributes[row].attribute_func_arguments[0]));
+            if (langwin->pending_attribarg_fields[row].size() == 1){
+                std::string arg_str = langwin->pending_attribarg_fields[row][0];
                 qobject_cast<QLineEdit*>(w_input)->setText(QString::fromStdString(arg_str));
             }
         }
@@ -35,22 +35,25 @@ void WattrSettingsWindow::LoadArgFields(WordAttributeFunctionPreset preset){
 
 void WattrSettingsWindow::SetupCustomUi(){
     ui->argsLayout->setAlignment(Qt::AlignTop);
-    std::string str_windowattrname = langwin->pending_wordattributes[row].attribute_identifier;
+    std::string str_windowattrname = atr_name;
     ui->mainBox->setTitle(QString::fromStdString(str_windowattrname));
     for (unsigned int i=0; i<ENUM_WATTR_PRESET_LAST; i++){
         ui->presetCbBox->addItem(QString::fromStdString(WordAttributeFunctionPreset::GetWattrPresetName((WATTR_PRESET_FUNCTION)i)));
     }
-    pending_preset = langwin->pending_wordattributes[row].attribute_func_preset;
-    ui->presetCbBox->setCurrentIndex(pending_preset.func_preset);
 };
 
-WattrSettingsWindow::WattrSettingsWindow(LangSettingsWindow *window, unsigned int row_nb, QWidget *parent)
+WattrSettingsWindow::WattrSettingsWindow(LangSettingsWindow *window,
+                                         unsigned int row_nb, std::string atrname, WordAttributeFunctionPreset pendingpreset,
+                                         QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::WattrSettingsWindow){
     ui->setupUi(this);
     langwin = window;
     row = row_nb;
+    atr_name = atrname;
     SetupCustomUi();
+    pending_preset = pendingpreset;
+    ui->presetCbBox->setCurrentIndex(pending_preset.func_preset);
 };
 
 WattrSettingsWindow::~WattrSettingsWindow(){
@@ -66,9 +69,7 @@ void WattrSettingsWindow::on_quitBtn_clicked()
 
 void WattrSettingsWindow::on_applyBtn_clicked()
 {
-    //langwin->pending_wordattributes[row].attribute_func_arguments.clear();
-    //langwin->pending_wordattributes[row].attribute_func_preset = pending_preset;
-    langwin->pending_attribargs[row].clear();
+    langwin->pending_attribarg_fields[row].clear();
     QModelIndex index = langwin->wattr_model->index(row, 1);
     langwin->wattr_model->setData(index, QString::fromStdString(WordAttributeFunctionPreset::GetWattrPresetName(pending_preset.func_preset)));
     switch (pending_preset.func_preset){
@@ -76,19 +77,9 @@ void WattrSettingsWindow::on_applyBtn_clicked()
     case ENUM_WATTR_PRESET_ADD_SUFFIX:
     {
         std::string sylblsstr = qobject_cast<QLineEdit*>(arg_widgets[0])->text().toStdString();
-        std::vector<Syllable> sylbls = Syllable::SyllablesFromArgString(sylblsstr, &langwin->mainwin->context.generator.letter_groups);
-        langwin->pending_attribargs[row].push_back(sylbls);
-        //langwin->pending_wordattributes[row].attribute_func_arguments.push_back(sylbls);
-        /*if (pending_preset.func_preset == ENUM_WATTR_PRESET_ADD_PREFIX){
-            langwin->pending_wordattributes[row].attribute_function = [sylbls](Word *word) {WordAttributeFunctionPreset::WATTR_PRESET_ADD_PREFIX(sylbls, word);};
-        }
-        else{
-            langwin->pending_wordattributes[row].attribute_function = [sylbls](Word *word) {WordAttributeFunctionPreset::WATTR_PRESET_ADD_SUFFIX(sylbls, word);};
-        }
-        return;*/
+        langwin->pending_attribarg_fields[row].push_back(sylblsstr);
     }
     case ENUM_WATTR_PRESET_DONOTHING:
-        //langwin->pending_wordattributes[row].attribute_function = WordAttributeFunctionPreset::WATTR_PRESET_DONOTHING;
     default:
         break;
     }

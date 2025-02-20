@@ -54,21 +54,6 @@
           <string>Letters and Syllables</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QLabel" name="ltrgrpLbl">
-            <property name="font">
-             <font>
-              <underline>true</underline>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Format : &amp;lt;GROUP&amp;gt;:&amp;lt;LETTERS&amp;gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Group can be any string &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Letters can be any string separated by a space &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Each line is one group&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>Letters and Letter groups</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
            <widget class="QLabel" name="sylptnLbl">
             <property name="font">
@@ -93,18 +78,27 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="isylptnexLbl">
+          <item row="0" column="0">
+           <widget class="QLabel" name="ltrgrpLbl">
             <property name="font">
              <font>
               <underline>true</underline>
              </font>
             </property>
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Format : &amp;lt;GROUPS&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Separate each group by a space&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Each line is one intersyllabic pattern exclusion&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Format : &amp;lt;GROUP&amp;gt;:&amp;lt;LETTERS&amp;gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Group can be any string &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Letters can be any string separated by a space &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Each line is one group&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
-             <string>Intersyllabic Pattern exclusion</string>
+             <string>Letters and Letter groups</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" rowspan="3">
+           <widget class="QPlainTextEdit" name="ltrgrpTxtEdit">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
             </property>
            </widget>
           </item>
@@ -117,12 +111,18 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0" rowspan="3">
-           <widget class="QPlainTextEdit" name="ltrgrpTxtEdit">
+          <item row="2" column="1">
+           <widget class="QLabel" name="isylptnexLbl">
             <property name="font">
              <font>
-              <pointsize>11</pointsize>
+              <underline>true</underline>
              </font>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Format : &amp;lt;GROUPS&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Separate each group by a space&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Each line is one intersyllabic pattern exclusion&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Intersyllabic Pattern exclusion</string>
             </property>
            </widget>
           </item>
@@ -194,6 +194,13 @@
           </item>
          </layout>
         </widget>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="errLabel">
+        <property name="text">
+         <string>Err Label</string>
+        </property>
        </widget>
       </item>
      </layout>
