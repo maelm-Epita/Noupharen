@@ -30,17 +30,23 @@ std::string LetterGroup::LGStringFromLetterGroups(std::vector<LetterGroup> group
     return res;
 }
 
+std::string LetterGroup::SPStringFromSyllablePattern(SyllablePattern ptn){
+    std::string res;
+    for (unsigned int j=0; j<ptn.size(); j++){
+        LetterGroup* lg = ptn[j];
+        res += lg->group_identifier;
+        if (j!=ptn.size()-1){
+            res += " ";
+        }
+    }
+    return res;
+}
+
 std::string LetterGroup::SPStringFromSyllablePatterns(std::vector<SyllablePattern> patterns){
     std::string res;
     for (unsigned int i=0; i<patterns.size(); i++){
         SyllablePattern sp = patterns[i];
-        for (unsigned int j=0; j<sp.size(); j++){
-            LetterGroup* lg = sp[j];
-            res += lg->group_identifier;
-            if (j!=sp.size()-1){
-                res += " ";
-            }
-        }
+        res += SPStringFromSyllablePattern(sp);
         if (i!=patterns.size()-1){
             res += "\n";
         }

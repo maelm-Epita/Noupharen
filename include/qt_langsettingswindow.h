@@ -38,11 +38,13 @@ private slots:
 
     void on_delwattrBtn_clicked();
 
-    void OnWattrmodelDatachanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QList <int> &roles);
-
 private:
     Ui::LangSettingsWindow *ui;
     QStandardItemModel *wgrp_model;
+    QStandardItemModel *sylptn_prob_model;
+    QStandardItemModel *ltr_prob_model;
+    QStandardItemModel *wgrp_prob_model;
+    QStandardItemModel *wattr_prob_model;
     AttributeTableView *wattr_tbv;
 
     void SetupCustomUi();

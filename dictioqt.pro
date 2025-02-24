@@ -17,8 +17,8 @@ SOURCES += \
     src/qt_attributetableview.cpp \
     src/qt_langsettingswindow.cpp \
     src/qt_mainwindow.cpp \
-    src/qt_tbvbuttondelegate.cpp \
     src/qt_tbvcomboboxdelegate.cpp \
+    src/qt_tbvspinboxdelegate.cpp \
     src/qt_wattrsettingswindow.cpp \
     src/settingserror.cpp \
     src/syllable.cpp \
@@ -36,8 +36,8 @@ HEADERS += \
     include/qt_attributetableview.h \
     include/qt_langsettingswindow.h \
     include/qt_mainwindow.h \
-    include/qt_tbvbuttondelegate.h \
     include/qt_tbvcomboboxdelegate.h \
+    include/qt_tbvspinboxdelegate.h \
     include/qt_wattrsettingswindow.h \
     include/settingserror.hpp \
     include/syllable.hpp \

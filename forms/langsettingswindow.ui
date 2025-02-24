@@ -47,13 +47,28 @@
       <item row="0" column="0" colspan="2">
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="ltrTab">
          <attribute name="title">
           <string>Letters and Syllables</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="ltrgrpLbl">
+            <property name="font">
+             <font>
+              <underline>true</underline>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Format : &amp;lt;GROUP&amp;gt;:&amp;lt;LETTERS&amp;gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Group can be any string &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Letters can be any string separated by a space &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Each line is one group&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Letters and Letter groups</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="1">
            <widget class="QLabel" name="sylptnLbl">
             <property name="font">
@@ -78,39 +93,6 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="ltrgrpLbl">
-            <property name="font">
-             <font>
-              <underline>true</underline>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Format : &amp;lt;GROUP&amp;gt;:&amp;lt;LETTERS&amp;gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Group can be any string &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Letters can be any string separated by a space &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Each line is one group&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>Letters and Letter groups</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" rowspan="3">
-           <widget class="QPlainTextEdit" name="ltrgrpTxtEdit">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QPlainTextEdit" name="isylptnexTxtEdit">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
            <widget class="QLabel" name="isylptnexLbl">
             <property name="font">
@@ -123,6 +105,24 @@
             </property>
             <property name="text">
              <string>Intersyllabic Pattern exclusion</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QPlainTextEdit" name="isylptnexTxtEdit">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" rowspan="3">
+           <widget class="QPlainTextEdit" name="ltrgrpTxtEdit">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
             </property>
            </widget>
           </item>
@@ -190,6 +190,113 @@
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="probTab">
+         <attribute name="title">
+          <string>Probabilities</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="2" column="0">
+           <widget class="QTableView" name="sylptnprobTbl">
+            <property name="sortingEnabled">
+             <bool>true</bool>
+            </property>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QTableView" name="wgrpprobTbl">
+            <property name="sortingEnabled">
+             <bool>true</bool>
+            </property>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QTableView" name="ltrprobTbl">
+            <property name="sortingEnabled">
+             <bool>true</bool>
+            </property>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="wgrpprobLbl">
+            <property name="font">
+             <font>
+              <underline>true</underline>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Probabilities for choosing word groups during word creation&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Word Groups</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QTableView" name="wattrprobTbl">
+            <property name="sortingEnabled">
+             <bool>true</bool>
+            </property>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="ltrprobLbl">
+            <property name="font">
+             <font>
+              <underline>true</underline>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Probabilities for choosing letters within letter groups during the second step of syllable creation.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Letters</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="sylptnprobLbl">
+            <property name="font">
+             <font>
+              <underline>true</underline>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Probabilities for choosing syllable patterns during the &lt;/span&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;first step of s&lt;/span&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;yllable creation. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Syllable patterns</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="wattrprobLbl">
+            <property name="font">
+             <font>
+              <underline>true</underline>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Probabilities for choosing word attributes within word groups during word creation&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Word Attributes</string>
+            </property>
            </widget>
           </item>
          </layout>
