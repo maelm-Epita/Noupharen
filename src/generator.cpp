@@ -9,6 +9,10 @@ Generator::Generator(){
   letter_groups = {};
   word_groups = {};
   syllable_patterns = {};
+  letter_probabilities = {};
+  wordgrp_probabilities = {};
+  wordattr_probabilities = {};
+  sylptn_probabilities = {};
 }
 
 Syllable Generator::GenerateSyllable(){
@@ -51,3 +55,77 @@ std::vector<Word> Generator::GenerateWords(){
   }
   return words;
 };
+
+Probability Generator::GetSylPtnProbability(SyllablePattern ptn){
+    for (unsigned int i=0; i<syllable_patterns.size(); i++){
+        if (syllable_patterns[i] == ptn){
+            return sylptn_probabilities[i];
+        }
+    }
+}
+Probability Generator::GetWordGrpProbability(WordGroup grp){
+    for (unsigned int i=0; i<word_groups.size(); i++){
+        if (word_groups[i].group_identifier == grp.group_identifier){
+            return wordgrp_probabilities[i];
+        }
+    }
+}
+Probability Generator::GetLetterProbability(Letter ltr, LetterGroup grp){
+    for (unsigned int i=0; i<letter_groups.size(); i++){
+        if (letter_groups[i].group_identifier == grp.group_identifier){
+            for (unsigned int j=0; j<letter_groups[i].letters.size(); j++){
+                if (letter_groups[i].letters[j].character == ltr.character){
+                    return letter_probabilities[i][j];
+                }
+            }
+        }
+    }
+}
+Probability Generator::GetWordAttrProbability(WordAttribute atr, WordGroup grp){
+    for (unsigned int i=0; i<word_groups.size(); i++){
+        if (word_groups[i].group_identifier == grp.group_identifier){
+            for (unsigned int j=0; j<word_groups[i].possible_attributes.size(); j++){
+                if (word_groups[i].possible_attributes[j].attribute_identifier== atr.attribute_identifier){
+                    return wordattr_probabilities[i][j];
+                }
+            }
+        }
+    }
+}
+
+void Generator::SetSylPtnProbability(SyllablePattern ptn, Probability prob){
+    for (unsigned int i=0; i<syllable_patterns.size(); i++){
+        if (syllable_patterns[i] == ptn){
+            sylptn_probabilities[i] = prob;
+        }
+    }
+}
+void Generator::SetWordGrpProbability(WordGroup grp, Probability prob){
+    for (unsigned int i=0; i<word_groups.size(); i++){
+        if (word_groups[i].group_identifier == grp.group_identifier){
+            wordgrp_probabilities[i] = prob;
+        }
+    }
+}
+void Generator::SetLetterProbability(Letter ltr, LetterGroup grp, Probability prob){
+    for (unsigned int i=0; i<letter_groups.size(); i++){
+        if (letter_groups[i].group_identifier == grp.group_identifier){
+            for (unsigned int j=0; j<letter_groups[i].letters.size(); j++){
+                if (letter_groups[i].letters[j].character == ltr.character){
+                    letter_probabilities[i][j] = prob;
+                }
+            }
+        }
+    }
+}
+void Generator::SetWordAttrProbability(WordAttribute atr, WordGroup grp, Probability prob){
+    for (unsigned int i=0; i<word_groups.size(); i++){
+        if (word_groups[i].group_identifier == grp.group_identifier){
+            for (unsigned int j=0; j<word_groups[i].possible_attributes.size(); j++){
+                if (word_groups[i].possible_attributes[j].attribute_identifier== atr.attribute_identifier){
+                    wordattr_probabilities[i][j] = prob;
+                }
+            }
+        }
+    }
+}

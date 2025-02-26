@@ -4,6 +4,49 @@
 
 #include <include/qt_tbvspinboxdelegate.h>
 
+Probability GetPendingSylPtnProbability(SyllablePattern ptn, QStandardItemModel* model){
+    Probability pb;
+    pb.value = 1;
+    std::string spstr = LetterGroup::SPStringFromSyllablePattern(ptn);
+    for (unsigned int i=0; i<model->rowCount(); i++){
+        if (model->data(model->index(i, 0)).toString().toStdString() == spstr){
+            pb.value = model->data(model->index(i, 1)).toFloat();
+        }
+    }
+    return pb;
+}
+Probability GetPendingLetterProbability(LetterGroup grp, Letter ltr, QStandardItemModel* model){
+    Probability pb;
+    pb.value = 1;
+    std::string ltrstr = ltr.character + " (" + grp.group_identifier + ")";
+    for (unsigned int i=0; i<model->rowCount(); i++){
+        if (model->data(model->index(i, 0)).toString().toStdString() == ltrstr){
+            pb.value = model->data(model->index(i, 1)).toFloat();
+        }
+    }
+    return pb;
+}
+Probability GetPendingWrdGrpProbability(WordGroup grp, QStandardItemModel* model){
+    Probability pb;
+    pb.value = 1;
+    for (unsigned int i=0; i<model->rowCount(); i++){
+        if (model->data(model->index(i, 0)).toString().toStdString() == grp.group_identifier){
+            pb.value = model->data(model->index(i, 1)).toFloat();
+        }
+    }
+    return pb;
+}
+Probability GetPendingWrdAttrProbability(WordGroup grp, WordAttribute attr, QStandardItemModel* model){
+    Probability pb;
+    pb.value = 1;
+    std::string attrstr = attr.attribute_identifier + " (" + grp.group_identifier + ")";
+    for (unsigned int i=0; i<model->rowCount(); i++){
+        if (model->data(model->index(i, 0)).toString().toStdString() == attrstr){
+            pb.value = model->data(model->index(i, 1)).toFloat();
+        }
+    }
+    return pb;
+}
 
 void LangSettingsWindow::SetupCustomUi(){
     ui->errLabel->setVisible(false);
@@ -42,6 +85,7 @@ void LangSettingsWindow::LoadContextSettings(){
     wattr_model->clear();
     wattr_model->setHorizontalHeaderLabels({"Name", "Function", "Edit Function Parameter(s)"});
     ui->wattrTblView->setItemDelegateForColumn(1, new TBVComboBoxDelegate(wattr_tbv));
+    pending_attribarg_fields.clear();
     std::vector<WordGroup> wgroups = mainwin->context.generator.word_groups;
     for (WordGroup grp : wgroups){
         std::string wgrp_id = grp.group_identifier;
@@ -94,15 +138,15 @@ void LangSettingsWindow::LoadContextSettings(){
         QList<QStandardItem*> sylptn_row;
         std::string sylptn_str = LetterGroup::SPStringFromSyllablePattern(gen.syllable_patterns[i]);
         sylptn_row << new QStandardItem(QString::fromStdString(sylptn_str));
-        //
+        sylptn_row << new QStandardItem(QString::number(gen.GetSylPtnProbability(gen.syllable_patterns[i]).value));
         sylptn_prob_model->appendRow(sylptn_row);
     }
     for (unsigned int i=0; i<gen.letter_groups.size(); i++){
         LetterGroup grp = gen.letter_groups[i];
         for (unsigned int j=0; j<grp.letters.size(); j++){
             QList<QStandardItem*> ltr_row;
-            ltr_row << new QStandardItem(QString::fromStdString(grp.letters[j].character));
-            //
+            ltr_row << new QStandardItem(QString::fromStdString(grp.letters[j].character + " (" + grp.group_identifier + ")"));
+            ltr_row << new QStandardItem(QString::number(gen.GetLetterProbability(grp.letters[j], grp).value));
             ltr_prob_model->appendRow(ltr_row);
         }
     }
@@ -110,21 +154,14 @@ void LangSettingsWindow::LoadContextSettings(){
         WordGroup grp = gen.word_groups[i];
         QList<QStandardItem*> wgrp_row;
         wgrp_row << new QStandardItem(QString::fromStdString(grp.group_identifier));
-        //
+        wgrp_row << new QStandardItem(QString::number(gen.GetWordGrpProbability(grp).value));
         wgrp_prob_model->appendRow(wgrp_row);
         for (unsigned int j=0; j<grp.possible_attributes.size(); j++){
             WordAttribute attr = grp.possible_attributes[j];
-            bool alreadyAdded=0;
-            for (unsigned int z=0; z<wattr_prob_model->rowCount(); z++){
-                std::string row_txt = wattr_prob_model->data(wattr_prob_model->index(z, 0)).toString().toStdString();
-                if (row_txt == attr.attribute_identifier) alreadyAdded=1;
-            }
-            if (!alreadyAdded){
-                QList<QStandardItem*> wattr_row;
-                wattr_row << new QStandardItem(QString::fromStdString(attr.attribute_identifier));
-                //
-                wattr_prob_model->appendRow(wattr_row);
-            }
+            QList<QStandardItem*> wattr_row;
+            wattr_row << new QStandardItem(QString::fromStdString(attr.attribute_identifier + " (" + grp.group_identifier + ")"));
+            wattr_row << new QStandardItem(QString::number(gen.GetWordAttrProbability(attr, grp).value));
+            wattr_prob_model->appendRow(wattr_row);
         }
     }
 }
@@ -200,10 +237,34 @@ SETTINGS_ERROR LangSettingsWindow::ApplySettings(){
         }
         pending_wordgroups.push_back(grp);
     }
+    std::vector<Probability> pending_sylptn_prob;
+    for (unsigned int i=0; i<pending_syllablepatterns.size(); i++){
+        pending_sylptn_prob.push_back(GetPendingSylPtnProbability(pending_syllablepatterns[i], sylptn_prob_model));
+    }
+    std::vector<std::vector<Probability>> pending_letter_prob;
+    for (unsigned int i=0; i<pending_lettergroups.size(); i++){
+        pending_letter_prob.push_back({});
+        for (unsigned int j=0; j<pending_lettergroups[i].letters.size(); j++){
+            pending_letter_prob[i].push_back(GetPendingLetterProbability(pending_lettergroups[i], pending_lettergroups[i].letters[j], ltr_prob_model));
+        }
+    }
+    std::vector<Probability> pending_wordgrp_prob;
+    std::vector<std::vector<Probability>> pending_wordattr_prob;
+    for (unsigned int i=0; i<pending_wordgroups.size(); i++){
+        pending_wordgrp_prob.push_back(GetPendingWrdGrpProbability(pending_wordgroups[i], wgrp_prob_model));
+        pending_wordattr_prob.push_back({});
+        for (unsigned int j=0; j<pending_wordgroups[i].possible_attributes.size(); j++){
+            pending_wordattr_prob[i].push_back(GetPendingWrdAttrProbability(pending_wordgroups[i], pending_wordgroups[i].possible_attributes[j], wattr_prob_model));
+        }
+    }
     // apply if no err, when applying, need to reload all the config
     if (err == SETTINGS_ERROR_NOERR){
         mainwin->context.generator.syllable_patterns = pending_syllablepatterns;
         mainwin->context.generator.word_groups = pending_wordgroups;
+        mainwin->context.generator.sylptn_probabilities = pending_sylptn_prob;
+        mainwin->context.generator.letter_probabilities = pending_letter_prob;
+        mainwin->context.generator.wordgrp_probabilities= pending_wordgrp_prob;
+        mainwin->context.generator.wordattr_probabilities= pending_wordattr_prob;
         LoadContextSettings();
     }
     else{

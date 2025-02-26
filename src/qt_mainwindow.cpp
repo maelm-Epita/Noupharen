@@ -23,7 +23,7 @@ void MainWindow::SetupContext(){
   context.generator.letter_groups.push_back(lgroup1);
   context.generator.letter_groups.push_back(lgroup2);
   SyllablePattern pat1, pat2, pat3;
-  pat1.push_back(&context.generator.letter_groups[0]);
+  /*pat1.push_back(&context.generator.letter_groups[0]);
   pat1.push_back(&context.generator.letter_groups[1]);
   pat1.push_back(&context.generator.letter_groups[1]);
   pat1.push_back(&context.generator.letter_groups[0]);
@@ -74,6 +74,7 @@ void MainWindow::SetupContext(){
   context.generator.min_syllable_count = 2;
   context.generator.max_syllable_count = 6;
   context.generator.nb_words = 10;
+*/
 }
 
 SETTINGS_ERROR MainWindow::ApplySettings(){

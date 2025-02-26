@@ -20,7 +20,7 @@ int climain(){
   lgroup2.letters.push_back(letter2);
   lgroup2.letters.push_back(letter5);
   SyllablePattern pat1, pat2, pat3;
-  pat1.push_back(&lgroup1);
+  /*pat1.push_back(&lgroup1);
   pat1.push_back(&lgroup2);
   pat1.push_back(&lgroup2);
   pat1.push_back(&lgroup1);
@@ -79,5 +79,6 @@ int climain(){
   for (Word word : dictionary.words){
     std::cout << word.GetDebugString() << "\n";
   }
+*/
   return 0;
 }

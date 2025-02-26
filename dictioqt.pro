@@ -33,6 +33,7 @@ HEADERS += \
     include/helpers.h \
     include/letter.hpp \
     include/lettergroup.hpp \
+    include/probability.hpp \
     include/qt_attributetableview.h \
     include/qt_langsettingswindow.h \
     include/qt_mainwindow.h \
