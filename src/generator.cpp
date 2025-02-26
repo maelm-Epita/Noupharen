@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <ctime>
+#include <random>
 #include "include/generator.hpp"
 
 Generator::Generator(){
@@ -13,36 +14,42 @@ Generator::Generator(){
   wordgrp_probabilities = {};
   wordattr_probabilities = {};
   sylptn_probabilities = {};
+  std::mt19937 rd(std::random_device{}());
+  random = rd;
 }
 
 Syllable Generator::GenerateSyllable(){
-  Syllable new_syllable;
-  unsigned int syllable_pattern_index = rand() % syllable_patterns.size(); // random syllable pattern
-  new_syllable.pattern = syllable_patterns[syllable_pattern_index];
-  for (LetterGroup *group : new_syllable.pattern){
-    unsigned int letter_index = rand() % group->letters.size(); // random letter from current group
-    new_syllable.letters.push_back(&group->letters[letter_index]);
-  }
-  return new_syllable;
+    Syllable new_syllable;
+    std::discrete_distribution<size_t> sylptn_d = Probability::GetDiscreteDistribution(sylptn_probabilities);
+    unsigned int sylptn_index = sylptn_d(random);
+    new_syllable.pattern = syllable_patterns[sylptn_index];
+    for (LetterGroup *group : new_syllable.pattern){
+        std::discrete_distribution<size_t> ltr_d = Probability::GetDiscreteDistribution(letter_probabilities[sylptn_index]);
+        unsigned int ltr_index = ltr_d(random);
+        new_syllable.letters.push_back(&group->letters[ltr_index]);
+    }
+    return new_syllable;
 }
 
 Word Generator::GenerateWord(){
-  Word new_word;
-  unsigned int wgroup_index = rand() % (word_groups.size()); // random word group
-  new_word.group = &word_groups[wgroup_index];
-  unsigned int wattr_index = rand() % (new_word.group->possible_attributes.size()); // random attr from group
-  new_word.attributes.push_back(&new_word.group->possible_attributes[wattr_index]);
-  unsigned int syllable_count = rand() % (max_syllable_count-min_syllable_count+1) + min_syllable_count; // random word size
-  //
-  for (unsigned int i=0; i<syllable_count; i++){
-    new_word.syllables.push_back(GenerateSyllable());
-  }
-  // THIS LINE WILL CAUSE A CRASH IF NEW LETTER GROUPS ARE CREATED WHILE ATTRIBUTES DON'T CHANGE BECAUSE
-  // OBVIOUSLY THE ATTRIBUTE FUNCTIONS LETTER POINTERS POINT TO LETTERS FROM GROUPS THAT DONT EXISTE ANYMORE LOL
-  for (WordAttribute *attr : new_word.attributes){
-    //attr->attribute_function(&new_word); // apply attr
-  }
-  return new_word;
+    Word new_word;
+    std::discrete_distribution<size_t> wgrp_d = Probability::GetDiscreteDistribution(wordgrp_probabilities);
+    unsigned int wgroup_index = wgrp_d(random); // random word group
+    new_word.group = &word_groups[wgroup_index];
+    std::discrete_distribution<size_t> wattr_d = Probability::GetDiscreteDistribution(wordattr_probabilities[wgroup_index]);
+    unsigned int wattr_index = wattr_d(random); // random attr from group
+    new_word.attributes.push_back(&new_word.group->possible_attributes[wattr_index]);
+    unsigned int syllable_count = rand() % (max_syllable_count-min_syllable_count+1) + min_syllable_count; // random word size
+    //
+    for (unsigned int i=0; i<syllable_count; i++){
+        new_word.syllables.push_back(GenerateSyllable());
+    }
+    // THIS LINE WILL CAUSE A CRASH IF NEW LETTER GROUPS ARE CREATED WHILE ATTRIBUTES DON'T CHANGE BECAUSE
+    // OBVIOUSLY THE ATTRIBUTE FUNCTIONS LETTER POINTERS POINT TO LETTERS FROM GROUPS THAT DONT EXISTE ANYMORE LOL
+    for (WordAttribute *attr : new_word.attributes){
+        //attr->attribute_function(&new_word); // apply attr
+    }
+    return new_word;
 }
 
 std::vector<Word> Generator::GenerateWords(){

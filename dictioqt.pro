@@ -14,6 +14,7 @@ SOURCES += \
     src/generator.cpp \
     src/helpers.cpp \
     src/lettergroup.cpp \
+    src/probability.cpp \
     src/qt_attributetableview.cpp \
     src/qt_langsettingswindow.cpp \
     src/qt_mainwindow.cpp \

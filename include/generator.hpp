@@ -3,6 +3,7 @@
 #include "lettergroup.hpp"
 #include "word.hpp"
 #include "include/probability.hpp"
+#include <random>
 
 // A generator is an object which holds a state, configured before generating words
 class Generator{
@@ -35,6 +36,7 @@ public:
   void SetLetterProbability(Letter, LetterGroup, Probability);
   void SetWordAttrProbability(WordAttribute, WordGroup, Probability);
 private:
+  std::mt19937 random;
   Syllable GenerateSyllable();
   Word GenerateWord();
 };
