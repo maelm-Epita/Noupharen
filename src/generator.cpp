@@ -10,6 +10,7 @@ Generator::Generator(){
   letter_groups = {};
   word_groups = {};
   syllable_patterns = {};
+  excluded_intersylpatterns = {};
   letter_probabilities = {};
   wordgrp_probabilities = {};
   wordattr_probabilities = {};
@@ -23,8 +24,10 @@ Syllable Generator::GenerateSyllable(){
     std::discrete_distribution<size_t> sylptn_d = Probability::GetDiscreteDistribution(sylptn_probabilities);
     unsigned int sylptn_index = sylptn_d(random);
     new_syllable.pattern = syllable_patterns[sylptn_index];
+    // should be group index not sylptn index
     for (LetterGroup *group : new_syllable.pattern){
-        std::discrete_distribution<size_t> ltr_d = Probability::GetDiscreteDistribution(letter_probabilities[sylptn_index]);
+        int lgrp_index = GetLetterGroupProbabilityIndex(group);
+        std::discrete_distribution<size_t> ltr_d = Probability::GetDiscreteDistribution(letter_probabilities[lgrp_index]);
         unsigned int ltr_index = ltr_d(random);
         new_syllable.letters.push_back(&group->letters[ltr_index]);
     }
@@ -42,7 +45,19 @@ Word Generator::GenerateWord(){
     unsigned int syllable_count = rand() % (max_syllable_count-min_syllable_count+1) + min_syllable_count; // random word size
     //
     for (unsigned int i=0; i<syllable_count; i++){
-        new_word.syllables.push_back(GenerateSyllable());
+        Syllable newsyl = GenerateSyllable();
+        if (i!=0){
+            unsigned int limit=0;
+            while (!CheckIntersyllablePatternExclusionValid(new_word.syllables[i-1], newsyl)){
+                if (limit == 100){
+                    i=0;
+                    new_word.syllables.clear();
+                }
+                newsyl = GenerateSyllable();
+                limit++;
+            }
+        }
+        new_word.syllables.push_back(newsyl);
     }
     // THIS LINE WILL CAUSE A CRASH IF NEW LETTER GROUPS ARE CREATED WHILE ATTRIBUTES DON'T CHANGE BECAUSE
     // OBVIOUSLY THE ATTRIBUTE FUNCTIONS LETTER POINTERS POINT TO LETTERS FROM GROUPS THAT DONT EXISTE ANYMORE LOL
@@ -135,4 +150,24 @@ void Generator::SetWordAttrProbability(WordAttribute atr, WordGroup grp, Probabi
             }
         }
     }
+}
+
+bool Generator::CheckIntersyllablePatternExclusionValid(Syllable syla, Syllable sylb){
+    LetterGroup* gra = syla.pattern[syla.pattern.size()-1];
+    LetterGroup* grb = sylb.pattern[0];
+    for (SyllablePattern ptn : excluded_intersylpatterns){
+        if (ptn[0] == gra && ptn[1] == grb){
+            return false;
+        }
+    }
+    return true;
+}
+
+int Generator::GetLetterGroupProbabilityIndex(LetterGroup* grp){
+    for (unsigned int i=0; i<letter_groups.size(); i++){
+        if (&letter_groups[i] == grp){
+            return i;
+        }
+    }
+    return -1;
 }

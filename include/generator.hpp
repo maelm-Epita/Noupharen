@@ -19,6 +19,7 @@ public:
   std::vector<LetterGroup> letter_groups;
   std::vector<WordGroup> word_groups;
   std::vector<SyllablePattern> syllable_patterns;
+  std::vector<SyllablePattern> excluded_intersylpatterns;
   std::vector<Probability> sylptn_probabilities;
   std::vector<Probability> wordgrp_probabilities;
   std::vector<std::vector<Probability>> letter_probabilities;
@@ -39,4 +40,6 @@ private:
   std::mt19937 random;
   Syllable GenerateSyllable();
   Word GenerateWord();
+  bool CheckIntersyllablePatternExclusionValid(Syllable, Syllable);
+  int GetLetterGroupProbabilityIndex(LetterGroup* grp);
 };

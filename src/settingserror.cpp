@@ -12,6 +12,8 @@ std::string GetSettingsErrorMessage(SETTINGS_ERROR err){
         return "Minimum syllable number greater than maximum";
     case SETTINGS_ERROR_SYLLABLE_PATTERN:
         return "One or multiple syllable patterns contain an unknown letter group";
+    case SETTINGS_ERROR_INTERSYLLABLE_PATTERN_EXCLUSION:
+        return "One or multiple intersyllabic pattern exclusions contain an unknown letter group";
     case SETTINGS_ERROR_ATTRIBUTE_ARGUMENT:
         return "One or multiple attribute arguments contain an unknown letter";
     case SETTINGS_ERROR_WORDGROUP_ATTRIBUTE_UNKNOWN:

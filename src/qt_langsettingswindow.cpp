@@ -79,6 +79,8 @@ void LangSettingsWindow::LoadContextSettings(){
     ui->ltrgrpTxtEdit->setPlainText(QString::fromStdString(lgrpstr));
     std::string spstr = LetterGroup::SPStringFromSyllablePatterns(mainwin->context.generator.syllable_patterns);
     ui->sylptnTxtEdit->setPlainText(QString::fromStdString(spstr));
+    std::string ispexstr = LetterGroup::SPStringFromSyllablePatterns(mainwin->context.generator.excluded_intersylpatterns);
+    ui->isylptnexTxtEdit->setPlainText(QString::fromStdString(ispexstr));
     // second tab
     wgrp_model->clear();
     wgrp_model->setHorizontalHeaderLabels({"Name", "Attribute(s)"});
@@ -185,6 +187,7 @@ SETTINGS_ERROR LangSettingsWindow::ApplySettings(){
     SETTINGS_ERROR err = SETTINGS_ERROR_NOERR;
     std::string LGString = ui->ltrgrpTxtEdit->toPlainText().toStdString();
     std::string SPString = ui->sylptnTxtEdit->toPlainText().toStdString();
+    std::string ISPEXString = ui->isylptnexTxtEdit->toPlainText().toStdString();
     std::vector<LetterGroup> pending_lettergroups = LetterGroup::LetterGroupsFromLGString(LGString);
     std::vector<LetterGroup> old_lettergroups = mainwin->context.generator.letter_groups;
     mainwin->context.generator.letter_groups = pending_lettergroups;
@@ -192,6 +195,10 @@ SETTINGS_ERROR LangSettingsWindow::ApplySettings(){
     std::vector<SyllablePattern> pending_syllablepatterns;
     if (LetterGroup::SyllablePatternsFromSPString(SPString, grps, &pending_syllablepatterns)){
         err = SETTINGS_ERROR_SYLLABLE_PATTERN;
+    }
+    std::vector<SyllablePattern> pending_intersyllable_excluded_patterns;
+    if (LetterGroup::SyllablePatternsFromSPString(ISPEXString, grps, &pending_intersyllable_excluded_patterns)){
+        err = SETTINGS_ERROR_INTERSYLLABLE_PATTERN_EXCLUSION;
     }
     std::vector<WordAttribute> pending_wattrs;
     for (unsigned int i=0; i<pending_attribarg_fields.size(); i++){
@@ -260,6 +267,7 @@ SETTINGS_ERROR LangSettingsWindow::ApplySettings(){
     // apply if no err, when applying, need to reload all the config
     if (err == SETTINGS_ERROR_NOERR){
         mainwin->context.generator.syllable_patterns = pending_syllablepatterns;
+        mainwin->context.generator.excluded_intersylpatterns = pending_intersyllable_excluded_patterns;
         mainwin->context.generator.word_groups = pending_wordgroups;
         mainwin->context.generator.sylptn_probabilities = pending_sylptn_prob;
         mainwin->context.generator.letter_probabilities = pending_letter_prob;
