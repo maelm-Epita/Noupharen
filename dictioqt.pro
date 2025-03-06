@@ -30,6 +30,7 @@ SOURCES += \
 HEADERS += \
     forms/langsettingswindow.h \
     include/dictionary.hpp \
+    include/dictword.h \
     include/generator.hpp \
     include/helpers.h \
     include/letter.hpp \

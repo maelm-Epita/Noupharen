@@ -22,6 +22,7 @@ public:
         Dictionary dictionary;
     };
     Context context;
+    std::vector<Word> current_generated_output;
 private slots:
     void on_generateBtn_clicked();
 
@@ -29,9 +30,20 @@ private slots:
 
     void on_langSetngsBtn_clicked();
 
+    void on_saveToDictBtn_clicked();
+
+    void on_delDictBtn_clicked();
+
+    void on_dictModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+
+    void on_saveDictBtn_clicked();
+
+    void on_loadDictBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
-    QStandardItemModel *model;
+    QStandardItemModel *output_model;
+    QStandardItemModel *dict_model;
 
     void SetupContext();
     void SetupCustomUi();

@@ -1,6 +1,7 @@
 #include "include/qt_mainwindow.h"
 #include "include/qt_langsettingswindow.h"
 #include "ui_mainwindow.h"
+#include <QFileDialog>
 
 
 void MainWindow::SetupContext(){
@@ -100,9 +101,13 @@ SETTINGS_ERROR MainWindow::ApplySettings(){
 }
 
 void MainWindow::SetupCustomUi(){
-    model = new QStandardItemModel(0, 2, 0);
-    model->setHorizontalHeaderLabels({"Word", "Group(s)"});
-    ui->outpuTblView->setModel(model);
+    output_model = new QStandardItemModel(0, 2, 0);
+    output_model->setHorizontalHeaderLabels({"Word", "Group(s)"});
+    ui->outpuTblView->setModel(output_model);
+    dict_model = new QStandardItemModel(0,3,0);
+    dict_model->setHorizontalHeaderLabels({"Word", "Group(s)", "Meaning"});
+    ui->dictTblView->setModel(dict_model);
+    connect(dict_model, &QAbstractItemModel::dataChanged, this, &MainWindow::on_dictModelDataChanged);
     ui->errLabel->setVisible(false);
 }
 
@@ -128,26 +133,20 @@ void MainWindow::on_generateBtn_clicked()
     }
     std::vector<Word> generated_words = context.generator.GenerateWords();
     for (Word word : generated_words){
-        std::string group_string = word.group->group_identifier + " (";
-        for (unsigned int i=0; i<word.attributes.size(); i++){
-            group_string += word.attributes[i]->attribute_identifier;
-            if (i!=word.attributes.size()-1){
-                group_string += ", ";
-            }
-        }
-        group_string += ")";
+        current_generated_output.push_back(word);
         QList<QStandardItem*> row;
         row << new QStandardItem(QString::fromStdString(word.GetString()));
-        row << new QStandardItem(QString::fromStdString(group_string));
-        model->appendRow(row);
+        row << new QStandardItem(QString::fromStdString(word.GetGroupString()));
+        output_model->appendRow(row);
     }
 }
 
 
 void MainWindow::on_clearOutBtn_clicked()
 {
-    model->clear();
-    model->setHorizontalHeaderLabels({"Word", "Group(s)"});
+    current_generated_output.clear();
+    output_model->clear();
+    output_model->setHorizontalHeaderLabels({"Word", "Group(s)"});
 }
 
 
@@ -155,5 +154,84 @@ void MainWindow::on_langSetngsBtn_clicked()
 {
     LangSettingsWindow *win = new LangSettingsWindow(this, this);
     win->exec();
+}
+
+
+void MainWindow::on_saveToDictBtn_clicked()
+{
+    QModelIndexList selection = ui->outpuTblView->selectionModel()->selectedIndexes();
+    std::vector<Word> w;
+    for (QModelIndex item : selection){
+        w.push_back(current_generated_output[item.row()]);
+    }
+    context.dictionary.AddWords(w);
+    for (unsigned int i=0; i<w.size(); i++){
+        QList<QStandardItem*> row;
+        row << new QStandardItem(QString::fromStdString(w[i].GetString()));
+        row << new QStandardItem(QString::fromStdString(w[i].GetGroupString()));
+        row << new QStandardItem(QString::fromStdString(""));
+        dict_model->appendRow(row);
+    }
+}
+
+void MainWindow::on_delDictBtn_clicked()
+{
+    QModelIndexList selection = ui->dictTblView->selectionModel()->selectedIndexes();
+    for (QModelIndex item : selection){
+        dict_model->removeRow(item.row());
+        if (context.dictionary.words.size() > item.row()){
+            context.dictionary.words.erase(context.dictionary.words.begin() + item.row());
+        }
+    }
+}
+
+void MainWindow::on_dictModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight){
+    if (topLeft.row() != bottomRight.row() || topLeft.column() != bottomRight.column()){
+        return;
+    }
+    std::string str = dict_model->data(dict_model->index(topLeft.row(), topLeft.column())).toString().toStdString();
+    if (topLeft.column() == 0){
+        context.dictionary.words[topLeft.row()].word= str;
+    }
+    if (topLeft.column() == 1){
+        context.dictionary.words[topLeft.row()].group = str;
+    }
+    if (topLeft.column() == 2){
+        context.dictionary.words[topLeft.row()].meaning = str;
+    }
+}
+
+void MainWindow::on_saveDictBtn_clicked()
+{
+    std::string filename = QFileDialog::getSaveFileName().toStdString();
+    if (filename == ""){
+        return;
+    }
+    std::string extension = ".dict";
+    std::string test = filename.substr(filename.size()-extension.size(), extension.size());
+    if (test != extension){
+        filename += extension;
+    }
+    context.dictionary.SaveToFile(filename);
+}
+
+
+void MainWindow::on_loadDictBtn_clicked()
+{
+    std::string filename = QFileDialog::getOpenFileName().toStdString();
+    if (filename == ""){
+        return;
+    }
+    if (!context.dictionary.LoadFromFile(filename)){
+        return;
+    }
+    dict_model->clear();
+    for (DictWord w : context.dictionary.words){
+        QList<QStandardItem*> row;
+        row << new QStandardItem(QString::fromStdString(w.word));
+        row << new QStandardItem(QString::fromStdString(w.group));
+        row << new QStandardItem(QString::fromStdString(w.meaning));
+        dict_model->appendRow(row);
+    }
 }
 

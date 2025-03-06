@@ -23,3 +23,15 @@ std::string Word::GetDebugString(){
   }
   return result;
 }
+
+std::string Word::GetGroupString(){
+    std::string group_string = group->group_identifier + " (";
+    for (unsigned int i=0; i<attributes.size(); i++){
+        group_string += attributes[i]->attribute_identifier;
+        if (i!=attributes.size()-1){
+            group_string += ", ";
+        }
+    }
+    group_string += ")";
+    return group_string;
+}

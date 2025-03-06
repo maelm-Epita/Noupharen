@@ -11,6 +11,7 @@ struct Word{
   WordGroup *group;
   // Gets the string representation of the word
   std::string GetString();
+  std::string GetGroupString();
   std::string GetDebugString();
 };
 
