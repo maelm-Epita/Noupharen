@@ -26,6 +26,7 @@ void Dictionary::SaveToFile(std::string path){
     for (DictWord wrd : words){
         File << wrd.word + "," + wrd.group + "," + wrd.meaning + ",\n";
     }
+    File.close();
 }
 
 bool Dictionary::LoadFromFile(std::string path){
@@ -52,5 +53,6 @@ bool Dictionary::LoadFromFile(std::string path){
             }
         }
     }
+    File.close();
     return true;
 }

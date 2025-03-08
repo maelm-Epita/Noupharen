@@ -207,7 +207,7 @@ void MainWindow::on_saveDictBtn_clicked()
     if (filename == ""){
         return;
     }
-    std::string extension = ".dict";
+    std::string extension = ".ndict";
     std::string test = filename.substr(filename.size()-extension.size(), extension.size());
     if (test != extension){
         filename += extension;
@@ -234,4 +234,42 @@ void MainWindow::on_loadDictBtn_clicked()
         dict_model->appendRow(row);
     }
 }
+
+void MainWindow::on_saveSetngsBtn_clicked()
+{
+    ApplySettings();
+    std::string filename = QFileDialog::getSaveFileName().toStdString();
+    if (filename == ""){
+        return;
+    }
+    std::string extension = ".nsetting";
+    std::string test = filename.substr(filename.size()-extension.size(), extension.size());
+    if (test != extension){
+        filename += extension;
+    }
+    context.generator.SaveToFile(filename);
+}
+
+void MainWindow::on_loadSetngsBtn_clicked()
+{
+    std::string filename = QFileDialog::getOpenFileName().toStdString();
+    if (filename == ""){
+        return;
+    }
+    if (!context.generator.LoadFromFile(filename)){
+        return;
+    }
+}
+
+void MainWindow::on_clearSetngsBtn_clicked()
+{
+    context.generator.ClearSettings();
+    ui->maxNbSSpin->setValue(0);
+    ui->minNbSSpin->setValue(0);
+    ui->nbWSpin->setValue(0);
+}
+
+
+
+
 

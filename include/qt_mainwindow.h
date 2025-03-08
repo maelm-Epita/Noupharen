@@ -40,6 +40,12 @@ private slots:
 
     void on_loadDictBtn_clicked();
 
+    void on_clearSetngsBtn_clicked();
+
+    void on_saveSetngsBtn_clicked();
+
+    void on_loadSetngsBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     QStandardItemModel *output_model;

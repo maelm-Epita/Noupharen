@@ -10,3 +10,14 @@ std::vector<std::string> split(std::string str, char tok){
     }
     return v;
 };
+
+std::vector<std::string> split_last(std::string str, char tok){
+    std::string s;
+    std::stringstream ss(str);
+    std::vector<std::string> v;
+    while (getline(ss, s, tok)){
+        v.push_back(s);
+    }
+    v.push_back(s);
+    return v;
+}

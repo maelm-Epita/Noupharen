@@ -59,6 +59,9 @@ std::vector<LetterGroup> LetterGroup::LetterGroupsFromLGString(std::string strin
     std::vector<LetterGroup> res;
     std::vector<std::string> lgstrs = split(string, '\n');
     for (std::string lgrp : lgstrs){
+        if (lgrp.empty()){
+            continue;
+        }
         LetterGroup grp;
         std::vector<std::string> lgtoks = split(lgrp, ':');
         std::string gid = lgtoks[0];
@@ -78,6 +81,9 @@ std::vector<LetterGroup> LetterGroup::LetterGroupsFromLGString(std::string strin
 bool LetterGroup::SyllablePatternsFromSPString(std::string string, std::vector<LetterGroup> *grps, std::vector<SyllablePattern>* res){
     std::vector<std::string> ptrns = split(string, '\n');
     for (std::string ptrn : ptrns){
+        if (ptrn.empty()){
+            continue;
+        }
         SyllablePattern pattern;
         std::vector<std::string> grpids = split(ptrn, ' ');
         for (std::string grpid : grpids ){

@@ -31,6 +31,11 @@ public:
   Probability GetWordGrpProbability(WordGroup);
   Probability GetLetterProbability(Letter, LetterGroup);
   Probability GetWordAttrProbability(WordAttribute, WordGroup);
+  // File operations;
+  void SaveToFile(std::string);
+  bool LoadFromFile(std::string);
+  // Helpers for self
+  void ClearSettings();
   // unused
   void SetSylPtnProbability(SyllablePattern, Probability);
   void SetWordGrpProbability(WordGroup, Probability);
