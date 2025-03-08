@@ -66,7 +66,7 @@ Word Generator::GenerateWord(){
     // THIS LINE WILL CAUSE A CRASH IF NEW LETTER GROUPS ARE CREATED WHILE ATTRIBUTES DON'T CHANGE BECAUSE
     // OBVIOUSLY THE ATTRIBUTE FUNCTIONS LETTER POINTERS POINT TO LETTERS FROM GROUPS THAT DONT EXISTE ANYMORE LOL
     for (WordAttribute *attr : new_word.attributes){
-        //attr->attribute_function(&new_word); // apply attr
+        attr->attribute_function(&new_word); // apply attr
     }
     return new_word;
 }
@@ -269,14 +269,17 @@ void Generator::SaveToFile(std::string path){
         }
         File << grpattrstr + "\n";
     }
+    File << "[end]";
     File.close();
 }
 
+// holy shit, this is unclean, this is unsanitary, this is unholy
 bool Generator::LoadFromFile(std::string path){
     std::ifstream File(path);
     if (!File.is_open()){
         return false;
     }
+    ClearSettings();
     std::string line;
     std::vector<std::string> tokens;
     bool end;
@@ -284,12 +287,6 @@ bool Generator::LoadFromFile(std::string path){
     if (line != "[settings]"){
         return false;
     }
-    unsigned int n_w, min_s, max_s;
-    std::vector<LetterGroup> ltrg;
-    std::vector<WordGroup> wgrp;
-    std::vector<SyllablePattern> sylptn, e_isylptn;
-    std::vector<Probability> sylptn_pb, wordgrp_pb;
-    std::vector<std::vector<Probability>> letter_pb, wordattr_pb;
     std::getline(File, line);
     if (line != "[generator]"){
         return false;
@@ -299,9 +296,9 @@ bool Generator::LoadFromFile(std::string path){
     if (tokens.size() < 3){
         return false;
     }
-    n_w = std::stoi(tokens[0]);
-    min_s = std::stoi(tokens[1]);
-    max_s = std::stoi(tokens[2]);
+    nb_words = std::stoi(tokens[0]);
+    min_syllable_count = std::stoi(tokens[1]);
+    max_syllable_count = std::stoi(tokens[2]);
     std::getline(File, line);
     if (line != "[letter groups]"){
         return false;
@@ -317,21 +314,9 @@ bool Generator::LoadFromFile(std::string path){
         }
         else{
             ltrstr += line + "\n";
-            std::vector<Probability> grppbs;
-            tokens = split_last(line, ':');
-            if (tokens.size()!=2){
-                return false;
-            }
-            tokens = split(tokens[1], ' ');
-            for (std::string tok : tokens){
-                Probability pb;
-                pb.value = 1;
-                grppbs.push_back(pb);
-            }
-            letter_pb.push_back(grppbs);
         }
     }
-    ltrg = LetterGroup::LetterGroupsFromLGString(ltrstr);
+    letter_groups = LetterGroup::LetterGroupsFromLGString(ltrstr);
     if (line != "[syllable patterns]"){
         return false;
     }
@@ -346,12 +331,9 @@ bool Generator::LoadFromFile(std::string path){
         }
         else{
             sylstr += line + "\n";
-            Probability pb;
-            pb.value = 1;
-            sylptn_pb.push_back(pb);
         }
     }
-    if (!LetterGroup::SyllablePatternsFromSPString(sylstr, &ltrg, &sylptn)){
+    if (LetterGroup::SyllablePatternsFromSPString(sylstr, &letter_groups, &syllable_patterns) == 1){
         return false;
     }
     if (line != "[excluded intersyllabic patterns]"){
@@ -370,7 +352,7 @@ bool Generator::LoadFromFile(std::string path){
             e_isylstr += line + "\n";
         }
     }
-    if (!LetterGroup::SyllablePatternsFromSPString(e_isylstr, &ltrg, &e_isylptn)){
+    if (LetterGroup::SyllablePatternsFromSPString(e_isylstr, &letter_groups, &excluded_intersylpatterns) == 1){
         return false;
     }
     if (line != "[word groups]"){
@@ -390,10 +372,6 @@ bool Generator::LoadFromFile(std::string path){
                 return false;
             }
             WordGroup grp;
-            Probability pb;
-            pb.value = 1;
-            wordgrp_pb.push_back(pb);
-            std::vector<Probability> grppbs;
             for (unsigned int i=0; i<tokens.size(); i++){
                 if (i==0){
                     grp.group_identifier = tokens[i];
@@ -402,13 +380,9 @@ bool Generator::LoadFromFile(std::string path){
                     WordAttribute attr;
                     attr.attribute_identifier = tokens[i];
                     grp.possible_attributes.push_back(attr);
-                    Probability pb;
-                    pb.value = 1;
-                    grppbs.push_back(pb);
                 }
             }
-            wgrp.push_back(grp);
-            wordattr_pb.push_back(grppbs);
+            word_groups.push_back(grp);
         }
     }
     if (line != "[word group attributes]"){
@@ -433,7 +407,7 @@ bool Generator::LoadFromFile(std::string path){
                 WordAttributeFunctionPreset::GetWattrPresetEnum(tokens[1])];
             if (attr.attribute_func_preset.func_preset == ENUM_WATTR_PRESET_ADD_PREFIX){
                 std::vector<Syllable> arg1;
-                if (!Syllable::SyllablesFromArgString(tokens[2], &ltrg, &arg1)){
+                if (Syllable::SyllablesFromArgString(tokens[2], &letter_groups, &arg1) == 1){
                     return false;
                 }
                 attr.attribute_func_arguments.push_back(arg1);
@@ -441,11 +415,11 @@ bool Generator::LoadFromFile(std::string path){
             }
             else if (attr.attribute_func_preset.func_preset == ENUM_WATTR_PRESET_ADD_SUFFIX){
                 std::vector<Syllable> arg1;
-                    if (!Syllable::SyllablesFromArgString(tokens[2], &ltrg, &arg1)){
+                if (Syllable::SyllablesFromArgString(tokens[2], &letter_groups, &arg1) == 1){
                     return false;
-                    }
-                    attr.attribute_func_arguments.push_back(arg1);
-                    attr.attribute_function = [arg1](Word *word) {WordAttributeFunctionPreset::WATTR_PRESET_ADD_SUFFIX(arg1, word);};
+                }
+                attr.attribute_func_arguments.push_back(arg1);
+                attr.attribute_function = [arg1](Word *word) {WordAttributeFunctionPreset::WATTR_PRESET_ADD_SUFFIX(arg1, word);};
             }
             else if (attr.attribute_func_preset.func_preset == ENUM_WATTR_PRESET_DONOTHING){
                 attr.attribute_func_arguments = {};
@@ -454,10 +428,10 @@ bool Generator::LoadFromFile(std::string path){
             else {
                 break;
             }
-            for (WordGroup grp : wgrp){
-                for (WordAttribute groupattr : grp.possible_attributes){
-                    if (groupattr.attribute_identifier == attr.attribute_identifier){
-                        groupattr = attr;
+            for (unsigned int i=0; i<word_groups.size(); i++){
+                for (unsigned int j=0; j<word_groups[i].possible_attributes.size(); j++){
+                    if (word_groups[i].possible_attributes[j].attribute_identifier == attr.attribute_identifier){
+                        word_groups[i].possible_attributes[j] = attr;
                     }
                 }
             }
@@ -468,7 +442,7 @@ bool Generator::LoadFromFile(std::string path){
         return false;
     }
     std::getline(File, line);
-    if (line != "{syllable patterns"){
+    if (line != "{syllable patterns}"){
         return false;
     }
     end = false;
@@ -480,32 +454,91 @@ bool Generator::LoadFromFile(std::string path){
             end = true;
         }
         else{
-            tokens = split_last(line, ':');
+            tokens = split(line, ':');
             if (tokens.size() != 2){
                 return false;
             }
-            // you could remove this search by just relying on the order of sylptns which should
-            // be made correct by the save function however i want the user to be free to modify
-            // the save file and potentially change the order of syllable patterns
-            for (unsigned int i=0; i<sylptn.size(); i++){
-                if (LetterGroup::SPStringFromSyllablePattern(sylptn[i]) == tokens[0]){
-                    sylptn_pb[i].value = std::stof(tokens[1]);
-                }
-            }
+            Probability pb;
+            pb.value = std::stof(tokens[1]);
+            sylptn_probabilities.push_back(pb);
         }
     }
-    if (line != "{letters")
-    nb_words = n_w;
-    min_syllable_count = min_s;
-    max_syllable_count = max_s;
-    letter_groups = ltrg;
-    word_groups = wgrp;
-    syllable_patterns = sylptn;
-    excluded_intersylpatterns = e_isylptn;
-    sylptn_probabilities = sylptn_pb;
-    wordgrp_probabilities = wordgrp_pb;
-    letter_probabilities = letter_pb;
-    wordattr_probabilities = wordattr_pb;
+    if (line != "{letters}"){
+        return false;
+    }
+    end = false;
+    while (!end){
+        if (!std::getline(File, line)){
+            return false;
+        }
+        if (line[0] == '{'){
+            end = true;
+        }
+        else{
+            std::vector<Probability> grppbs;
+            std::vector<std::string> grptoks = split(line, ',');
+            for (std::string grptok : grptoks){
+                tokens = split(grptok, ':');
+                if (tokens.size() != 2){
+                    return false;
+                }
+                Probability pb;
+                pb.value = std::stof(tokens[1]);
+                grppbs.push_back(pb);
+            }
+            letter_probabilities.push_back(grppbs);
+        }
+    }
+    if (line != "{word groups}"){
+        return false;
+    }
+    end = false;
+    while (!end){
+        if (!std::getline(File, line)){
+            return false;
+        }
+        if (line[0] == '{'){
+            end = true;
+        }
+        else{
+            tokens = split(line, ':');
+            if (tokens.size() != 2){
+                return false;
+            }
+            Probability pb;
+            pb.value = std::stof(tokens[1]);
+            wordgrp_probabilities.push_back(pb);
+        }
+    }
+    if (line!= "{word group attributes}"){
+        return false;
+    }
+    end = false;
+    while (!end){
+        if (!std::getline(File, line)){
+            return false;
+        }
+        if (line[0] == '['){
+            end = true;
+        }
+        else{
+            std::vector<Probability> grppbs;
+            std::vector<std::string> grptoks = split(line, ',');
+            for (std::string grptok : grptoks){
+                tokens = split(grptok, ':');
+                if (tokens.size() != 2){
+                    return false;
+                }
+                Probability pb;
+                pb.value = std::stof(tokens[1]);
+                grppbs.push_back(pb);
+            }
+            wordattr_probabilities.push_back(grppbs);
+        }
+    }
+    if (line != "[end]"){
+        return false;
+    }
     File.close();
     return true;
 }

@@ -256,8 +256,14 @@ void MainWindow::on_loadSetngsBtn_clicked()
     if (filename == ""){
         return;
     }
+    Generator backup = context.generator;
     if (!context.generator.LoadFromFile(filename)){
-        return;
+        context.generator = backup;
+    }
+    else{
+        ui->maxNbSSpin->setValue(context.generator.max_syllable_count);
+        ui->minNbSSpin->setValue(context.generator.min_syllable_count);
+        ui->nbWSpin->setValue(context.generator.nb_words);
     }
 }
 
