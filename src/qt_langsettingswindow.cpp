@@ -82,6 +82,7 @@ void LangSettingsWindow::LoadContextSettings(){
     std::string ispexstr = LetterGroup::SPStringFromSyllablePatterns(mainwin->context.generator.excluded_intersylpatterns);
     ui->isylptnexTxtEdit->setPlainText(QString::fromStdString(ispexstr));
     // second tab
+    size_t row_nb=0;
     wgrp_model->clear();
     wgrp_model->setHorizontalHeaderLabels({"Name", "Attribute(s)"});
     wattr_model->clear();
@@ -108,6 +109,7 @@ void LangSettingsWindow::LoadContextSettings(){
                 row << new QStandardItem(QString::fromStdString(wattr.attribute_identifier));
                 row << new QStandardItem(QString::fromStdString(WordAttributeFunctionPreset::GetWattrPresetName(wattr.attribute_func_preset.func_preset)));
                 wattr_model->appendRow(row);
+                wattr_tbv->showButtonInCell(row_nb);
                 std::vector<std::string> arg_fields;
                 // Handle each preset type individually, donothing doesnt need anything pushed to the vector
                 if (wattr.attribute_func_preset.func_preset == ENUM_WATTR_PRESET_ADD_PREFIX ||
@@ -115,6 +117,7 @@ void LangSettingsWindow::LoadContextSettings(){
                     arg_fields.push_back(Syllable::ArgStringFromSyllables(std::get<std::vector<Syllable>>(wattr.attribute_func_arguments[0])));
                 }
                 pending_attribarg_fields.push_back(arg_fields);
+                row_nb++;
             }
         }
         QList<QStandardItem*> row;
@@ -208,6 +211,9 @@ SETTINGS_ERROR LangSettingsWindow::ApplySettings(){
         attr.attribute_func_preset = WordAttributeFunctionPreset::WordAttributeFunctionPresets[func_preset];
         if (attr.attribute_func_preset.func_preset == ENUM_WATTR_PRESET_ADD_PREFIX){
             std::vector<Syllable> arg1;
+            if (pending_attribarg_fields[i].size() < 1){
+                pending_attribarg_fields[i].push_back("");
+            }
             if (Syllable::SyllablesFromArgString(pending_attribarg_fields[i][0], &mainwin->context.generator.letter_groups, &arg1)){
                 err = SETTINGS_ERROR_ATTRIBUTE_ARGUMENT;
             }
@@ -216,6 +222,9 @@ SETTINGS_ERROR LangSettingsWindow::ApplySettings(){
         }
         else if (attr.attribute_func_preset.func_preset == ENUM_WATTR_PRESET_ADD_SUFFIX){
             std::vector<Syllable> arg1;
+            if (pending_attribarg_fields[i].size() < 1){
+                pending_attribarg_fields[i].push_back("");
+            }
             if (Syllable::SyllablesFromArgString(pending_attribarg_fields[i][0], &mainwin->context.generator.letter_groups, &arg1)){
                 err = SETTINGS_ERROR_ATTRIBUTE_ARGUMENT;
             }

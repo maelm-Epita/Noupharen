@@ -252,12 +252,15 @@ void MainWindow::on_saveSetngsBtn_clicked()
 
 void MainWindow::on_loadSetngsBtn_clicked()
 {
+    ui->errLabel->hide();
     std::string filename = QFileDialog::getOpenFileName().toStdString();
     if (filename == ""){
         return;
     }
     Generator backup = context.generator;
     if (!context.generator.LoadFromFile(filename)){
+        ui->errLabel->setText("Failed to load settings file. Please make sure this is a valid settings file. Please do not modify settings files as this could corrupt them.");
+        ui->errLabel->show();
         context.generator = backup;
     }
     else{

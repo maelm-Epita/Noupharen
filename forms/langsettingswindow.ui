@@ -62,7 +62,7 @@
              </font>
             </property>
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Format : &amp;lt;GROUP&amp;gt;:&amp;lt;LETTERS&amp;gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Group can be any string &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Letters can be any string separated by a space &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Each line is one group&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Format : &amp;lt;GROUP&amp;gt;:&amp;lt;LETTERS&amp;gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Group can be any string &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Letters can be any string separated by a space &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Each line is one group&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;A Group name or Letter cannot contain '[' or ':'&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Letters and Letter groups</string>
@@ -159,6 +159,14 @@
           </item>
           <item row="7" column="0">
            <widget class="QLabel" name="wattrLbl">
+            <property name="font">
+             <font>
+              <underline>true</underline>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A Word Attribute name cannot contain '[' or ':'&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Word Attributes</string>
             </property>
@@ -166,6 +174,14 @@
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="wgrpLbl">
+            <property name="font">
+             <font>
+              <underline>true</underline>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A Word Group name cannot contain '[' or ':'&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Word Groups</string>
             </property>
