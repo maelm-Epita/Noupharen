@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QPushButton>
+#include <include/qt_mainwindow.h>
 #include "src/qt_mainwindow.cpp"
 
 /*void debugSyl(){
@@ -29,9 +30,39 @@
 }
 */
 
+void SaveTempWIN(Context ctx){
+}
+void SaveTempUNIX(Context ctx){
+    ctx.generator.SaveToFile("/var/tmp/tmp.nsetting");
+    ctx.dictionary.SaveToFile("/var/tmp/tmp.ndict");
+}
+void LoadTempWin(Context* ctx){
+}
+void LoadTempUNIX(Context* ctx){
+    ctx->generator.LoadFromFile("/var/tmp/tmp.nsetting");
+    ctx->dictionary.LoadFromFile("/var/tmp/tmp.ndict");
+}
+
+void SaveTemp(Context ctx){
+#if defined(_WIN64)
+    SaveTempWIN(ctx);
+#else
+    SaveTempUNIX(ctx);
+#endif
+}
+void LoadTemp(Context* ctx){
+#if defined(_WIN64)
+    LoadTempWIN(ctx);
+#else
+    LoadTempUNIX(ctx);
+#endif
+}
+
 int main(int argc, char **argv){
     QApplication app (argc, argv);
     MainWindow win;
     win.show();
-    return app.exec();
+    int e = app.exec();
+    SaveTemp(win.context);
+    return e;
 }

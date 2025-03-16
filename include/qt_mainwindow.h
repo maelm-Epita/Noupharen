@@ -11,16 +11,17 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+struct Context{
+    Generator generator;
+    Dictionary dictionary;
+};
+
 class MainWindow : public QMainWindow{
     Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    struct Context{
-        Generator generator;
-        Dictionary dictionary;
-    };
     Context context;
     std::vector<Word> current_generated_output;
 private slots:
